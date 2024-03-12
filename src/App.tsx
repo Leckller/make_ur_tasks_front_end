@@ -1,8 +1,13 @@
-import Header from './components/Header';
+import { Route, Routes } from 'react-router-dom';
+import LoginRoute from './routes/LoginRoute';
+import TasksRoute from './routes/TasksRoute';
 
 function App() {
   return (
-    <Header />
+    <Routes>
+      <Route path="/" element={ <LoginRoute /> } />
+      <Route path="/:nickName" element={ <TasksRoute /> } />
+    </Routes>
   );
 }
 
