@@ -3,35 +3,17 @@ import Form from '../components/Form';
 import image from '../public/makeUrTasks.png';
 
 function LoginRoute() {
-  const [popup, setPopup] = useState({ cadastro: false, login: false });
-  const [inputs, setInputs] = useState({ cadastro: { email: '', password: '' },
-    login: { email: '', password: '' } });
+  const [popup, setPopup] = useState<{ cadastro: boolean, login: boolean }>(
+    { cadastro: false, login: false },
+  );
 
   useEffect(() => {
-    const effect = async () => {
-      const request = await fetch('http://localhost:6969/users', {
-        method: 'POST',
-        mode: 'cors',
-        body: JSON.stringify({
 
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const response = await request.json();
-      console.log(response);
-    };
-    effect();
   }, []);
-  const handleInput = (
-    type: string,
-    field: 'email' | 'password' | 'nickName',
-    value: string,
-  ) => {
-    setInputs({ [type]: { [field]: value }, ...inputs });
-  };
 
+  const handlePopUp = (field: string) => {
+    setPopup({ ...popup, [field]: field === 'login' ? !popup.login : !popup.cadastro });
+  };
   return (
     <div className="h-screen w-screen flex flex-col bg-[#11111F]">
 
@@ -50,23 +32,31 @@ function LoginRoute() {
           <button
             className="bg-black font-light var w-40 rounded-2xl p-1
             shadow-2xl shadow-[#1B2836]"
+            onClick={ () => setPopup({ ...popup, login: !popup.login }) }
           >
-            LOGIN
+            LOG IN
           </button>
           <span
             className="w-40 text-center font-extralight"
           >
-            Não possui uma conta?
+            {'Don\'t have an account?'}
           </span>
           <button
             className="bg-black font-light var w-40 rounded-2xl p-1
             shadow-2xl shadow-[#1B2836]"
+            onClick={ () => setPopup({ ...popup, cadastro: !popup.cadastro }) }
           >
-            CADASTRAR
+            SING UP
           </button>
         </div>
-        {popup.login && <Form handleInput={ handleInput } name="login" />}
-        {popup.cadastro && <Form handleInput={ handleInput } name="cadastro" />}
+        {popup.login && <Form
+          setPopUp={ handlePopUp }
+          name="login"
+        />}
+        {popup.cadastro && <Form
+          setPopUp={ handlePopUp }
+          name="cadastro"
+        />}
       </main>
 
       <footer className="w-full h-[5%]">

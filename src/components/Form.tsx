@@ -1,23 +1,76 @@
-function Form({ handleInput, name }: { name: string,
-  handleInput: (p:string, pp: 'email' | 'password' | 'nickName', ppp: string) => void }) {
+import { useState } from 'react';
+
+function Form({ setPopUp, name }: { name: string, setPopUp: (p: string) => void }) {
+  const [inputs, setInputs] = useState({ email: '', password: '', nickName: '' });
+
+  const handleSubmit = async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    const url = `http://localhost:6969/${name === 'login' ? 'login' : 'users'}`;
+    console.log(url);
+    const request = await fetch(url, {
+      method: 'POST',
+      mode: 'cors',
+      body: JSON.stringify(inputs),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    const response = await request.json();
+    console.log(response);
+  };
+
   return (
-    <form className="absolute bg-blue-100 w-[70%] h-[70%] flex flex-col justify-center">
-      <input
-        type="text"
-        name={ name }
-        onChange={ (e) => handleInput(e.target.name, 'email', e.target.value) }
-      />
-      <input
-        type="password"
-        name={ name }
-        onChange={ (e) => handleInput(e.target.name, 'nickName', e.target.value) }
-      />
-      <input
-        type="password"
-        name={ name }
-        onChange={ (e) => handleInput(e.target.name, 'password', e.target.value) }
-      />
-      <button>{name === 'login' ? 'Logar' : 'Cadastrar'}</button>
+    <form
+      className="absolute bg-[#68D2DF] w-[70%] h-[70%] flex flex-col justify-center
+      gap-5 rounded-lg text-white items-center md:w-[300px] md:h-[80%]"
+      onSubmit={ (e) => e.preventDefault() }
+    >
+      <button
+        onClick={ () => setPopUp(name) }
+        className="absolute top-3 left-5"
+      >
+        Voltar
+      </button>
+      <label className="flex flex-col">
+        <span>Email</span>
+        <input
+          required
+          className="outline-none w-40 rounded-lg text-[#11111F] pl-2"
+          type="text"
+          name="email"
+          onChange={ (e) => setInputs({ ...inputs, [e.target.name]: e.target.value }) }
+        />
+      </label>
+      <label className="flex flex-col">
+        <span>Password</span>
+        <input
+          required
+          className="outline-none w-40 rounded-lg text-[#11111F] pl-2"
+          type="password"
+          name="password"
+          onChange={ (e) => setInputs({ ...inputs, [e.target.name]: e.target.value }) }
+        />
+      </label>
+      {name === 'cadastro' && (
+        <label className="flex flex-col">
+          <span>User Name</span>
+          <input
+            required
+            className="outline-none w-40 rounded-lg text-[#11111F] pl-2"
+            type="text"
+            name="nickName"
+            onChange={ (e) => setInputs({ ...inputs, [e.target.name]: e.target.value }) }
+          />
+        </label>
+      )}
+      <button
+        onClick={ (e) => {
+          handleSubmit(e);
+        } }
+        className="bg-[#11111F] w-40 rounded-lg"
+      >
+        {name === 'login' ? 'LOG IN' : 'SIGN UP'}
+      </button>
     </form>
   );
 }
