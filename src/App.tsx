@@ -6,7 +6,7 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={ <LoginRoute /> } />
-      <Route path="/:nickName" element={ <TasksRoute /> } />
+      <Route path="/tasks" element={ <TasksRoute /> } />
     </Routes>
   );
 }

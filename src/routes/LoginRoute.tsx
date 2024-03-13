@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Form from '../components/Form';
 import image from '../public/makeUrTasks.png';
 
@@ -6,14 +6,10 @@ function LoginRoute() {
   const [popup, setPopup] = useState<{ cadastro: boolean, login: boolean }>(
     { cadastro: false, login: false },
   );
-
-  useEffect(() => {
-
-  }, []);
-
   const handlePopUp = (field: string) => {
     setPopup({ ...popup, [field]: field === 'login' ? !popup.login : !popup.cadastro });
   };
+
   return (
     <div className="h-screen w-screen flex flex-col bg-[#11111F]">
 

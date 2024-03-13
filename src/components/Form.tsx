@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AppContext from '../context/AppContext';
 
 function Form({ setPopUp, name }: { name: string, setPopUp: (p: string) => void }) {
   const [inputs, setInputs] = useState({ email: '', password: '', nickName: '' });
+  const { handlerNat } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
@@ -16,11 +20,19 @@ function Form({ setPopUp, name }: { name: string, setPopUp: (p: string) => void 
       },
     });
     const response = await request.json();
-    console.log(response);
+    if (response.message) {
+      // eslint-disable-next-line no-alert
+      alert(response.message);
+    }
+    if (response.token) {
+      handlerNat('token', response.token);
+      handlerNat('nickName', inputs.nickName);
+      navigate('/tasks');
+    }
   };
 
   return (
-    <form
+    <div
       className="absolute bg-[#68D2DF] w-[70%] h-[70%] flex flex-col justify-center
       gap-5 rounded-lg text-white items-center md:w-[300px] md:h-[80%]"
       onSubmit={ (e) => e.preventDefault() }
@@ -65,13 +77,14 @@ function Form({ setPopUp, name }: { name: string, setPopUp: (p: string) => void 
       )}
       <button
         onClick={ (e) => {
+          e.preventDefault();
           handleSubmit(e);
         } }
         className="bg-[#11111F] w-40 rounded-lg"
       >
         {name === 'login' ? 'LOG IN' : 'SIGN UP'}
       </button>
-    </form>
+    </div>
   );
 }
 
