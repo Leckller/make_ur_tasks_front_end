@@ -1,7 +1,11 @@
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import useLogin from '../service/useLogin';
 
 function LoginRoute() {
   const navigate = useNavigate();
+  const { effect } = useLogin();
+  const [body, setBody] = useState({ email: '', password: '' });
   return (
     <div className="h-screen w-screen flex flex-col bg-[#11111F]">
 
@@ -19,13 +23,18 @@ function LoginRoute() {
           Voltar
         </button>
 
-        <form className="flex flex-col w-full items-center gap-10">
+        <form
+          onSubmit={ (e) => e.preventDefault() }
+          className="flex flex-col w-full items-center gap-10"
+        >
 
           <label className="flex flex-col text-white">
             <span>Email</span>
             <input
+              name="email"
               className="outline-none w-40 rounded-lg text-[#11111F] pl-2"
               type="text"
+              onChange={ (e) => setBody({ ...body, [e.target.name]: e.target.value }) }
             />
           </label>
 
@@ -34,11 +43,14 @@ function LoginRoute() {
             <input
               className="outline-none w-40 rounded-lg text-[#11111F] pl-2"
               type="password"
+              name="password"
+              onChange={ (e) => setBody({ ...body, [e.target.name]: e.target.value }) }
             />
           </label>
 
           <button
             type="submit"
+            onClick={ () => effect(body) }
             className="bg-black font-light var w-40 rounded-2xl p-1 text-white"
           >
             LogIn

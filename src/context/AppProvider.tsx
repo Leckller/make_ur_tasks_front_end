@@ -1,8 +1,16 @@
 import { useState } from 'react';
 import AppContext from './AppContext';
+import { UserTasksType } from '../type';
 
 function AppProvider({ children }: { children: React.ReactNode }) {
+  const [reload, setReload] = useState(false);
   const [nickAndToken, setNickAndToken] = useState({ nickName: '', token: '' });
+  const [userTasks, setUserTasks] = useState<UserTasksType>({
+    nickName: '',
+    email: '',
+    id: 0,
+    tasks: [],
+  });
   const { token, nickName } = nickAndToken;
   const [message, setMessage] = useState('');
   const handlerNat = (field: string, value: string) => {
@@ -10,7 +18,18 @@ function AppProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AppContext.Provider value={ { nickName, token, handlerNat, message, setMessage } }>
+    <AppContext.Provider
+      value={ {
+        setReload,
+        reload,
+        setUserTasks,
+        userTasks,
+        nickName,
+        token,
+        handlerNat,
+        message,
+        setMessage } }
+    >
       {children}
     </AppContext.Provider>
   );

@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppContext from '../context/AppContext';
 
-function Users() {
+function useUsers() {
   const { handlerNat } = useContext(AppContext);
   const navigate = useNavigate();
   const url = 'http://localhost:6969/users';
@@ -33,4 +33,4 @@ function Users() {
   return { effect };
 }
 
-export default Users;
+export default useUsers;
