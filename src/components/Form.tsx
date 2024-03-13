@@ -8,7 +8,6 @@ function Form({ setPopUp, name }: { name: string, setPopUp: (p: string) => void 
   const navigate = useNavigate();
 
   const handleSubmit = async (e:React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
     const url = `http://localhost:6969/${name === 'login' ? 'login' : 'users'}`;
     console.log(url);
     const request = await fetch(url, {

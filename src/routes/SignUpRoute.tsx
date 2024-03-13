@@ -1,24 +1,21 @@
 import { useNavigate } from 'react-router-dom';
 
-function LoginRoute() {
+function SignUpRoute() {
   const navigate = useNavigate();
   return (
     <div className="h-screen w-screen flex flex-col bg-[#11111F]">
-
       <header className="w-full h-[10%] p-6">
         <span className="text-2xl text-white">
-          The Second Step To Victory Is Persistence.
+          The First Step To Victory.
         </span>
       </header>
-
-      <main className="h-[85%] relative w-full flex flex-col justify-center">
+      <main className="h-[85%] w-full flex flex-col justify-center">
         <button
           className="bg-black font-light var w-20 rounded-2xl m-5 text-white"
           onClick={ () => navigate(-1) }
         >
           Voltar
         </button>
-
         <form className="flex flex-col w-full items-center gap-10">
 
           <label className="flex flex-col text-white">
@@ -57,4 +54,4 @@ function LoginRoute() {
   );
 }
 
-export default LoginRoute;
+export default SignUpRoute;
