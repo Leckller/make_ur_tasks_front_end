@@ -13,7 +13,7 @@ function CreateTask({ close }: { close: (p:boolean) => void }) {
     deadline: data });
 
   return (
-    <section className="h-[45%] mt-20 w-[80%] absolute text-black">
+    <section className="h-[45%] z-10 w-[80%] absolute text-black">
       <header
         className="h-[50px] text-white gap-7 items-center
        bg-[#68D2DF] flex flex-row relative rounded-t-xl p-2"

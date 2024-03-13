@@ -5,7 +5,7 @@ function useTasks() {
   const { token } = useContext(AppContext);
 
   const effect = async (
-    body: { taskName?: string, deadline?: Date, id?: number },
+    body: { completed?: boolean, taskName?: string, deadline?: Date, id?: number },
     method: 'POST' | 'GET' | 'PATCH' | 'DELETE',
   ) => {
     const url = 'http://localhost:6969/tasks';

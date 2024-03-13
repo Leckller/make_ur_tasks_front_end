@@ -48,11 +48,14 @@ function TasksRoute() {
           {userTasks.tasks ? (
             userTasks.tasks.map((task) => (
               <div
-                className="w-[220px] min-h-20 max-h-20 bg-slate-400 rounded-lg
-                flex flex-col pl-2 pt-1"
+                className={ `w-[220px] min-h-20 max-h-20 rounded-lg flex
+                ${task.completed ? 'bg-[#68D2DF]' : 'bg-[#11111F] text-white'}
+                flex-col pl-2 pt-1 relative` }
                 key={ task.id }
               >
-                <h2>{task.taskName}</h2>
+                <h2 className={ `${task.completed ? 'line-through' : ''}` }>
+                  {task.taskName}
+                </h2>
                 {/* <span>
                   {JSON.stringify(task.deadline).split('"')[1].split('T')[0]}
                 </span> */}
@@ -60,8 +63,8 @@ function TasksRoute() {
                   {JSON.stringify(task.deadline).split('"')[1]
                     .split('T')[1].split('.')[0]}
                 </span>
-                <div className="flex flex-row gap-28">
-                  <h3>
+                <div className="flex flex-row overflow-hidden gap-2">
+                  <h3 className="w-36 break-words">
                     {task.description ? task.description : 'Focus!'}
                   </h3>
                   <div className="flex flex-row gap-2 font-extrabold">
@@ -76,8 +79,12 @@ function TasksRoute() {
                       X
                     </button>
                     <button
-                      className="w-5 h-5 rounded-full border flex
-                      justify-center items-center"
+                      className={ `w-5 h-5 rounded-full border flex
+                      justify-center items-center` }
+                      onClick={ () => {
+                        effect({ completed: !task.completed, id: task.id }, 'PATCH');
+                        setReload(!reload);
+                      } }
                     >
                       O
                     </button>
