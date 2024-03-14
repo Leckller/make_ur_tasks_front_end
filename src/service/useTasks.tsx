@@ -11,7 +11,7 @@ function useTasks() {
     method: 'POST' | 'GET' | 'PATCH' | 'DELETE',
   ) => {
     const url = `${urlBase}/tasks`;
-    const urlWithId = `http://localhost:6969/tasks/${body.id}`;
+    const urlWithId = `${urlBase}/${body.id}`;
     const request = await fetch(body.id ? urlWithId : url, {
       method,
       mode: 'cors',

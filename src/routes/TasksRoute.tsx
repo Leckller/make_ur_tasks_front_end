@@ -26,7 +26,6 @@ function TasksRoute() {
     setTimeout(() => {
       eff();
     }, 1000);
-    console.log(userTasks);
   }, [reload]);
 
   return (
