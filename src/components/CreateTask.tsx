@@ -1,16 +1,24 @@
 import { useContext, useState } from 'react';
-import useTasks from '../service/useTasks';
+import Swal from 'sweetalert2';
 import AppContext from '../context/AppContext';
+import { addTask } from '../service/fetch';
 
 function CreateTask({ close }: { close: (p:boolean) => void }) {
+  const { token, setReload, reload } = useContext(AppContext);
   const data = new Date();
   data.setDate(data.getDate() + 1);
-  const { effect } = useTasks();
-  const { setReload, reload } = useContext(AppContext);
   const [task, setTask] = useState({
     taskName: '',
     description: '',
     deadline: data });
+
+  const handleAddTask = async () => {
+    const request = await addTask(task, token);
+    Swal.fire({ title: request.message, timer: 1500, position: 'top-end' });
+
+    setReload(!reload);
+    close(false);
+  };
 
   return (
     <section className="h-[45%] z-10 w-[80%] absolute text-black">
@@ -63,11 +71,7 @@ function CreateTask({ close }: { close: (p:boolean) => void }) {
         </label>
         <button
           onClick={ () => {
-            effect(task, 'POST');
-            setReload(!reload);
-            setTimeout(() => {
-              close(false);
-            }, 500);
+            handleAddTask();
           } }
           type="submit"
           className="text-white bg-black font-light var w-40 rounded-2xl p-1"
