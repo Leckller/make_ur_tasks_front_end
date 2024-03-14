@@ -2,10 +2,12 @@ import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppContext from '../context/AppContext';
 
+const urlBase = 'https://makeurtasksbackend-production.up.railway.app';
+
 function useLogin() {
   const { handlerNat } = useContext(AppContext);
   const navigate = useNavigate();
-  const url = 'http://localhost:6969/login';
+  const url = `${urlBase}/login`;
 
   const effect = async (body: { password: string, email: string }) => {
     const request = await fetch(url, {
