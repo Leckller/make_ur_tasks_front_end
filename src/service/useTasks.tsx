@@ -1,6 +1,8 @@
 import { useContext } from 'react';
 import AppContext from '../context/AppContext';
 
+const urlBase = 'https://makeurtasksbackend-production.up.railway.app';
+
 function useTasks() {
   const { token } = useContext(AppContext);
 
@@ -8,7 +10,7 @@ function useTasks() {
     body: { completed?: boolean, taskName?: string, deadline?: Date, id?: number },
     method: 'POST' | 'GET' | 'PATCH' | 'DELETE',
   ) => {
-    const url = 'http://localhost:6969/tasks';
+    const url = `${urlBase}/tasks`;
     const urlWithId = `http://localhost:6969/tasks/${body.id}`;
     const request = await fetch(body.id ? urlWithId : url, {
       method,

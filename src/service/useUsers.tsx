@@ -2,10 +2,12 @@ import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppContext from '../context/AppContext';
 
+const urlBase = 'https://makeurtasksbackend-production.up.railway.app';
+
 function useUsers() {
   const { handlerNat } = useContext(AppContext);
   const navigate = useNavigate();
-  const url = 'http://localhost:6969/users';
+  const url = `${urlBase}/users`;
 
   const effect = async (body: { password: string, email: string, nickName: string }) => {
     const request = await fetch(url, {
