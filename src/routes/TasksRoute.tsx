@@ -1,29 +1,36 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AppContext from '../context/AppContext';
-import useTasks from '../service/useTasks';
 import CreateTask from '../components/CreateTask';
+import { allTasks, deleteTask, editTask } from '../service/fetch';
 
 function TasksRoute() {
-  const navigate = useNavigate();
-  const { effect } = useTasks();
-
   const [newTask, setNewTask] = useState(false);
+  const navigate = useNavigate();
+  const { nickName, token, setReload, setUserTasks, handlerNat, userTasks,
+    reload } = useContext(AppContext);
 
-  const { nickName, token,
-    setReload, setUserTasks, userTasks, reload } = useContext(AppContext);
+  const handleDeleteTask = async (id:number) => {
+    const request = await deleteTask(id, token);
+    alert(request.message);
+    setReload(!reload);
+  };
+  const handleEditTask = async (id:number, completed: boolean) => {
+    const request = await editTask({ completed }, id, token);
+    alert(request.message);
+    setReload(!reload);
+  };
 
   if (!token) {
     navigate('/');
   }
 
   useEffect(() => {
-    const eff = async () => {
-      const [resp] = await effect({}, 'GET');
-      setUserTasks(resp);
-    };
     setTimeout(() => {
-      eff();
+      allTasks(token).then((request) => {
+        setUserTasks(request);
+        handlerNat('nickName', request.nickName);
+      });
     }, 1000);
   }, [reload]);
 
@@ -70,8 +77,7 @@ function TasksRoute() {
                       className="w-5 h-5 rounded-full border flex
                       justify-center items-center"
                       onClick={ () => {
-                        effect({ id: task.id }, 'DELETE');
-                        setReload(!reload);
+                        handleDeleteTask(task.id);
                       } }
                     >
                       X
@@ -80,8 +86,7 @@ function TasksRoute() {
                       className={ `w-5 h-5 rounded-full border flex
                       justify-center items-center` }
                       onClick={ () => {
-                        effect({ completed: !task.completed, id: task.id }, 'PATCH');
-                        setReload(!reload);
+                        handleEditTask(task.id, !task.completed);
                       } }
                     >
                       O

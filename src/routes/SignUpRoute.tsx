@@ -1,11 +1,26 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import useUsers from '../service/useUsers';
+import { useContext, useState } from 'react';
+import { cadastro } from '../service/fetch';
+import AppContext from '../context/AppContext';
 
 function SignUpRoute() {
   const [body, setBody] = useState({ email: '', password: '', nickName: '' });
+  const { handlerNat } = useContext(AppContext);
   const navigate = useNavigate();
-  const { effect } = useUsers();
+
+  const sendCadastro = async () => {
+    const request = await cadastro(body);
+
+    alert(request.message);
+
+    if (request.token) {
+      handlerNat('token', request.token);
+      return navigate('/tasks');
+    }
+
+    return console.log(`Ocorreu algum erro${request}`);
+  };
+
   return (
     <div className="h-screen w-screen flex flex-col bg-[#11111F]">
       <header className="w-full h-[10%] p-6">
@@ -59,7 +74,7 @@ function SignUpRoute() {
           </label>
 
           <button
-            onClick={ () => effect(body) }
+            onClick={ () => sendCadastro() }
             type="submit"
             className="bg-black font-light var w-40 rounded-2xl p-1 text-white"
           >
