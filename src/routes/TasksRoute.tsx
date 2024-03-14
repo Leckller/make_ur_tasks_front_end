@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import AppContext from '../context/AppContext';
 import CreateTask from '../components/CreateTask';
 import { allTasks, deleteTask, editTask } from '../service/fetch';
@@ -12,20 +13,19 @@ function TasksRoute() {
 
   const handleDeleteTask = async (id:number) => {
     const request = await deleteTask(id, token);
-    alert(request.message);
+    Swal.fire(request.message);
     setReload(!reload);
   };
   const handleEditTask = async (id:number, completed: boolean) => {
     const request = await editTask({ completed }, id, token);
-    alert(request.message);
+    Swal.fire(request.message);
     setReload(!reload);
   };
 
-  if (!token) {
-    navigate('/');
-  }
-
   useEffect(() => {
+    if (!token) {
+      navigate('/');
+    }
     setTimeout(() => {
       allTasks(token).then((request) => {
         setUserTasks(request);

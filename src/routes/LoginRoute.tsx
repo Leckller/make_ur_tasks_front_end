@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
+import Swal from 'sweetalert2';
 import { login } from '../service/fetch';
 import AppContext from '../context/AppContext';
 
@@ -11,7 +12,7 @@ function LoginRoute() {
   const sendLogin = async () => {
     const request = await login(body);
 
-    alert(request.message);
+    Swal.fire(request.message);
 
     if (request.token) {
       handlerNat('token', request.token);

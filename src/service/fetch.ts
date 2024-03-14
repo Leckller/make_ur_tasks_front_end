@@ -59,7 +59,6 @@ export const deleteTask = async (id: number, token: string) => {
   const request = await fetch(url, {
     method: 'DELETE',
     mode: 'cors',
-    body: JSON.stringify(id),
     headers: {
       'Content-Type': 'application/json',
       auth: `Bearer: ${token}`,
