@@ -10,7 +10,7 @@ function TasksRoute() {
 
   const [newTask, setNewTask] = useState(false);
 
-  const { nickName, handlerNat, token,
+  const { nickName, token,
     setReload, setUserTasks, userTasks, reload } = useContext(AppContext);
 
   if (!token) {
@@ -21,12 +21,10 @@ function TasksRoute() {
     const eff = async () => {
       const [resp] = await effect({}, 'GET');
       setUserTasks(resp);
-      handlerNat('nickName', resp.nickName);
     };
     setTimeout(() => {
       eff();
     }, 1000);
-    console.log(userTasks);
   }, [reload]);
 
   return (
