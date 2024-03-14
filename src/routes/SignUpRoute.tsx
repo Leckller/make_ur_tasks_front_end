@@ -3,10 +3,11 @@ import { useContext, useState } from 'react';
 import Swal from 'sweetalert2';
 import { cadastro } from '../service/fetch';
 import AppContext from '../context/AppContext';
+import Footer from '../components/Footer';
 
 function SignUpRoute() {
   const [body, setBody] = useState({ email: '', password: '', nickName: '' });
-  const { handlerNat } = useContext(AppContext);
+  const { setToken } = useContext(AppContext);
   const navigate = useNavigate();
 
   const sendCadastro = async () => {
@@ -15,7 +16,7 @@ function SignUpRoute() {
     Swal.fire(request.message);
 
     if (request.token) {
-      handlerNat('token', request.token);
+      setToken(request.token);
       return navigate('/tasks');
     }
 
@@ -85,11 +86,7 @@ function SignUpRoute() {
         </form>
       </main>
 
-      <footer className="w-full text-center">
-        <span className="text-white">
-          Created by Ruy
-        </span>
-      </footer>
+      <Footer />
 
     </div>
   );

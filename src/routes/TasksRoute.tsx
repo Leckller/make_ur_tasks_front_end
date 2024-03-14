@@ -9,7 +9,7 @@ import ListTask from '../components/ListTask';
 function TasksRoute() {
   const [newTask, setNewTask] = useState(false);
   const navigate = useNavigate();
-  const { token, setUserTasks, handlerNat, reload } = useContext(AppContext);
+  const { token, setUserTasks, reload } = useContext(AppContext);
 
   useEffect(() => {
     if (!token) {
@@ -18,7 +18,6 @@ function TasksRoute() {
     setTimeout(() => {
       allTasks(token).then((request) => {
         setUserTasks(request);
-        handlerNat('nickName', request.nickName);
       });
     }, 1000);
   }, [reload]);

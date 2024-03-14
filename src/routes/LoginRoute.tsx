@@ -3,11 +3,12 @@ import { useContext, useState } from 'react';
 import Swal from 'sweetalert2';
 import { login } from '../service/fetch';
 import AppContext from '../context/AppContext';
+import Footer from '../components/Footer';
 
 function LoginRoute() {
   const [body, setBody] = useState({ email: '', password: '' });
   const navigate = useNavigate();
-  const { handlerNat } = useContext(AppContext);
+  const { setToken } = useContext(AppContext);
 
   const sendLogin = async () => {
     const request = await login(body);
@@ -15,7 +16,7 @@ function LoginRoute() {
     Swal.fire(request.message);
 
     if (request.token) {
-      handlerNat('token', request.token);
+      setToken(request.token);
       return navigate('/tasks');
     }
 
@@ -75,12 +76,7 @@ function LoginRoute() {
         </form>
       </main>
 
-      <footer className="w-full text-center">
-        <span className="text-white">
-          Created by Ruy
-        </span>
-      </footer>
-
+      <Footer />
     </div>
   );
 }
