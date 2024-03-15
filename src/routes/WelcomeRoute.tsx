@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import image from '../public/makeUrTasks.png';
+import Footer from '../components/Footer';
 
 function WelcomeRoute() {
   const navigate = useNavigate();
@@ -39,9 +40,7 @@ function WelcomeRoute() {
         </div>
       </main>
 
-      <footer className="text-white w-full h-[5%] text-center">
-        Created By Ruy
-      </footer>
+      <Footer />
     </div>
   );
 }
