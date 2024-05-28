@@ -9,7 +9,6 @@ export interface Checks {
 }
 
 export interface Task {
-  id: number;
   taskName: string;
   deadline: Date;
   description: string;
@@ -24,12 +23,12 @@ export type ResponseServer<DataType> = {
 };
 
 export interface ServerMethods {
-  cadastro(fields: SignFields): Promise<string>
-  login(fields: SignFields): Promise<string>
-  criarTarefa(fields: Task): Promise<ResponseServer<boolean>>
-  editarTarefa(fields: Task): Promise<ResponseServer<boolean>>
-  deletarTarefa(fields: Task): Promise<ResponseServer<boolean>>
-  todasTarefas(userId: number): Promise<ResponseServer<Task[]>>
+  cadastro(fields: SignFields): Promise<ResponseServer<string>>
+  login(fields: SignFields): Promise<ResponseServer<string>>
+  criarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>>
+  editarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>>
+  deletarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>>
+  todasTarefas(userId: number): Promise<ResponseServer<ResponseServer<Task[]>>>
 }
 
 export type FetchOptions = {
@@ -38,7 +37,7 @@ export type FetchOptions = {
 };
 
 export default class Server implements ServerMethods {
-  protected static async fetch(url: string, options: FetchOptions)
+  protected static async fetchServer(url: string, options: FetchOptions)
     : Promise<ResponseServer<any>> {
     const request = await fetch(url, {
       method: options.method,
@@ -52,27 +51,39 @@ export default class Server implements ServerMethods {
     return data;
   }
 
-  async cadastro(fields: SignFields): Promise<string> {
+  async cadastro(fields: SignFields): Promise<ResponseServer<string>> {
     const url = 'http://localhost:8001/user/cadastro';
+    const data = await Server.fetchServer(url, { body: fields, method: 'POST' });
+    return data;
   }
 
-  async login(fields: SignFields): Promise<string> {
+  async login(fields: SignFields): Promise<ResponseServer<string>> {
     const url = 'http://localhost:8001/user/login';
+    const data = await Server.fetchServer(url, { body: fields, method: 'POST' });
+    return data;
   }
 
-  async criarTarefa(fields: Task): Promise<void> {
+  async criarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>> {
     const url = 'http://localhost:8001/task/create';
+    const data = await Server.fetchServer(url, { body: fields, method: 'POST' });
+    return data;
   }
 
-  async deletarTarefa(fields: Task): Promise<void> {
+  async deletarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>> {
     const url = 'http://localhost:8001/task/delete';
+    const data = await Server.fetchServer(url, { body: fields, method: 'DELETE' });
+    return data;
   }
 
-  async editarTarefa(fields: Task): Promise<void> {
+  async editarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>> {
     const url = 'http://localhost:8001/task/edit';
+    const data = await Server.fetchServer(url, { body: fields, method: 'UPDATE' });
+    return data;
   }
 
-  async todasTarefas(userId: number): Promise<ResponseServer<Task[]>> {
+  async todasTarefas(userId: number): Promise<ResponseServer<ResponseServer<Task[]>>> {
     const url = 'http://localhost:8001/task';
+    const data = await Server.fetchServer(url, { body: { userId }, method: 'GET' });
+    return data;
   }
 }
