@@ -1,5 +1,5 @@
 import User from './User';
 import TaskUser from './TaskUser';
-import Task from './Task';
+import Task, { TaskWithNoId, TaskFields } from './Task';
 
-export type { User, Task, TaskUser };
+export type { User, Task, TaskUser, TaskWithNoId, TaskFields };
