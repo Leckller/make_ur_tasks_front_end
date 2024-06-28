@@ -16,3 +16,5 @@ export type TaskFields = 'taskName' | 'deadline'
 | 'description' | 'checks' | 'completed' | 'userId';
 
 export type TaskWithNoId = Omit<Task, 'id'>;
+
+export type PopupTypes = 'edit' | 'add' | 'view';

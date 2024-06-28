@@ -1,5 +1,9 @@
-import Popup from '../components/Popup';
 import { mockTask } from '../Mocks/Task.Mock';
+import HeaderComponent from '../components/HeaderComponent';
+import Popup from '../components/Popup';
+import Add from '../components/PopupHtmls/Add';
+import Edit from '../components/PopupHtmls/Edit';
+import View from '../components/PopupHtmls/View';
 import TaskComponent from '../components/TaskComponent';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
 import { openEdit } from '../redux/Reducers/Tasks';
@@ -9,27 +13,20 @@ function MainRoute() {
   const dispatch = useAppDispatch();
   return (
     <div
-      onFocus={ () => dispatch(openEdit()) }
+      onFocus={ () => dispatch(openEdit({ bool: 0, type: 'view' })) }
       className={ `
       w-screen h-screen flex items-center gap-5 flex-col
-      ${open ? 'bg-zinc-700' : ''}
+      ${open.bool ? 'bg-zinc-700' : ''}
       ` }
     >
-      <header className="flex flex-row justify-between w-full h-[10%] p-2 text-center">
-        <h1>Make Ur Tasks!</h1>
-        <div>
-          <button
-            className="text-center border"
-            onClick={ () => dispatch(openEdit()) }
-          >
-            Make a Task
-          </button>
-        </div>
-      </header>
+      <HeaderComponent />
 
-      {open && (
+      {open.bool && (
         <Popup title="teste">
-          oi
+          {
+            // eslint-disable-next-line no-nested-ternary
+            open.type === 'add' ? <Add /> : open.type === 'edit' ? <Edit /> : <View />
+          }
         </Popup>
       )}
 

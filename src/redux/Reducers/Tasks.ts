@@ -1,17 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
-import type { TaskWithNoId, Task, TaskFields } from '../../types';
+import type { TaskWithNoId, Task, TaskFields, PopupTypes } from '../../types';
 
 interface TaskState {
   tasks: Task[],
-  edit: boolean,
+  edit: { bool: boolean, type: PopupTypes },
   coockingTask: TaskWithNoId
 }
 
 const initialState: TaskState = {
   tasks: [],
-  edit: false,
+  edit: { bool: false, type: 'view' },
   coockingTask: {
     checks: [],
     completed: false,
@@ -26,11 +26,17 @@ export const TaskSlice = createSlice({
   name: 'Task',
   initialState,
   reducers: {
-    openEdit: (state, action: PayloadAction<0 | 1 | void>) => {
-      switch (action.payload) {
-        case 0: state.edit = false; return;
-        case 1: state.edit = true; return;
-        default: state.edit = !state.edit;
+    openEdit: (
+      state,
+      action: PayloadAction< { bool?: 0 | 1, type: PopupTypes }>,
+    ) => {
+      state.edit.type = action.payload.type;
+      switch (action.payload.bool) {
+        case 0: state.edit.bool = false;
+          return;
+        case 1: state.edit.bool = true;
+          return;
+        default: state.edit.bool = !state.edit;
       }
     },
     makeTask: (state, action: PayloadAction<{ field: TaskFields, value: any }>) => {

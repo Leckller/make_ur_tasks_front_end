@@ -15,7 +15,7 @@ function Popup({ children, title }: { children: ReactNode, title: string }) {
         <h2 className="text-xl">{title}</h2>
         <button
           className="text-2xl"
-          onClick={ () => dispatch(openEdit()) }
+          onClick={ () => dispatch(openEdit({ bool: 0, type: 'view' })) }
         >
           X
         </button>
