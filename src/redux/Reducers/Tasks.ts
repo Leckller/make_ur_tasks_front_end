@@ -15,7 +15,7 @@ const initialState: TaskState = {
   coockingTask: {
     checks: [],
     completed: false,
-    deadline: new Date(),
+    deadline: '11/02/2005' as unknown as Date,
     description: '',
     taskName: '',
     userId: 1,

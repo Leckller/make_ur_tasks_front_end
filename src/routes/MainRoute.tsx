@@ -12,7 +12,6 @@ function MainRoute() {
       onFocus={ () => dispatch(openEdit()) }
       className={ `
       w-screen h-screen flex items-center gap-5 flex-col
-      .transitionClean
       ${open ? 'bg-zinc-700' : ''}
       ` }
     >
@@ -33,6 +32,7 @@ function MainRoute() {
           oi
         </Popup>
       )}
+
       {mockTask && mockTask.map((task) => (
         <TaskComponent key={ task.id } task={ task } />
       ))}

@@ -2,13 +2,12 @@ import { ReactNode } from 'react';
 import { useAppDispatch } from '../hooks/reduxHooks';
 import { openEdit } from '../redux/Reducers/Tasks';
 
-function Popup({ children, title }:
-{ children: ReactNode, title: string }) {
+function Popup({ children, title }: { children: ReactNode, title: string }) {
   const dispatch = useAppDispatch();
   return (
     <div
       className="
-      absolute bg-slate-800 w-[80%] h-[90%] mt-[10%]
+      absolute bg-slate-800 w-[80%] h-[80%] mt-[50px]
       rounded-xl p-5 flex flex-col gap-5
       "
     >

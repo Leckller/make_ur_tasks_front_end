@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useAppDispatch } from '../hooks/reduxHooks';
 import { openEdit } from '../redux/Reducers/Tasks';
 import { Task } from '../types';
@@ -13,7 +14,10 @@ function TaskComponent({ task }: { task: Task }) {
       <button>
         Remove Task
       </button>
-      <button key={ task.id } onClick={ () => dispatch(openEdit()) }>
+      <button
+        className="bg-black"
+        onClick={ () => dispatch(openEdit()) }
+      >
         Edit Task
       </button>
     </div>
