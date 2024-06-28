@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+}
+
+.transitionClean {
+  transition-property: all;
+  transition-duration: "300ms"
+}
