@@ -7,10 +7,12 @@ import TaskClass from '../../components/Classes/TaskClass';
 interface TaskState {
   tasks: TaskWithNoId[],
   edit: { bool: boolean, type: PopupTypes },
-  coockingTask: TaskWithNoId
+  coockingTask: TaskWithNoId,
 }
 
-const initialState: TaskState = {
+const saveExists = localStorage.getItem('Task');
+
+const initialState: TaskState = saveExists ? JSON.parse(saveExists) : {
   tasks: [],
   edit: { bool: false, type: 'view' },
   coockingTask: new TaskClass(),
@@ -38,6 +40,7 @@ export const TaskSlice = createSlice({
     },
     addTask: (state, action: PayloadAction<TaskWithNoId>) => {
       state.tasks.push(action.payload);
+      localStorage.setItem('Task', JSON.stringify(state));
     },
     viewTask: (state, action: PayloadAction<TaskWithNoId>) => {
       state.coockingTask = action.payload;
