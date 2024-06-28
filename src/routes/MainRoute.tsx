@@ -1,19 +1,15 @@
-import { mockTask } from '../Mocks/Task.Mock';
 import HeaderComponent from '../components/HeaderComponent';
 import Popup from '../components/Popup';
 import Add from '../components/PopupHtmls/Add';
 import Edit from '../components/PopupHtmls/Edit';
 import View from '../components/PopupHtmls/View';
 import TaskComponent from '../components/TaskComponent';
-import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
-import { openEdit } from '../redux/Reducers/Tasks';
+import { useAppSelector } from '../hooks/reduxHooks';
 
 function MainRoute() {
-  const { edit: open } = useAppSelector((state) => state.Task);
-  const dispatch = useAppDispatch();
+  const { edit: open, tasks } = useAppSelector((state) => state.Task);
   return (
     <div
-      onFocus={ () => dispatch(openEdit({ bool: 0, type: 'view' })) }
       className={ `
       w-screen h-screen flex items-center gap-5 flex-col
       ${open.bool ? 'bg-zinc-700' : ''}
@@ -22,7 +18,7 @@ function MainRoute() {
       <HeaderComponent />
 
       {open.bool && (
-        <Popup title="teste">
+        <Popup>
           {
             // eslint-disable-next-line no-nested-ternary
             open.type === 'add' ? <Add /> : open.type === 'edit' ? <Edit /> : <View />
@@ -30,8 +26,8 @@ function MainRoute() {
         </Popup>
       )}
 
-      {mockTask && mockTask.map((task) => (
-        <TaskComponent key={ task.id } task={ task } />
+      {tasks && tasks.map((task, i) => (
+        <TaskComponent key={ task.taskName + i } task={ task } />
       ))}
     </div>
   );

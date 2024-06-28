@@ -1,14 +1,17 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useAppDispatch } from '../hooks/reduxHooks';
-import { openEdit } from '../redux/Reducers/Tasks';
-import { Task } from '../types';
+import { openEdit, viewTask } from '../redux/Reducers/Tasks';
+import { TaskWithNoId } from '../types';
 
-function TaskComponent({ task }: { task: Task }) {
+function TaskComponent({ task }: { task: TaskWithNoId }) {
   const dispatch = useAppDispatch();
   return (
     <div className="flex flex-row gap-3">
       <button
-        onClick={ () => dispatch(openEdit({ type: 'view', bool: 1 })) }
+        onClick={ () => {
+          dispatch(openEdit({ type: 'view', bool: 1 }));
+          dispatch(viewTask(task));
+        } }
       >
         <h2>{task.taskName}</h2>
       </button>
@@ -19,7 +22,6 @@ function TaskComponent({ task }: { task: Task }) {
         Remove Task
       </button>
       <button
-        className="bg-black"
         onClick={ () => dispatch(openEdit({ type: 'edit', bool: 1 })) }
       >
         Edit Task
