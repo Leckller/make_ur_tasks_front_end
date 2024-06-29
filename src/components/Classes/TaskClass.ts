@@ -1,7 +1,11 @@
 import { Checks } from '../../service/Server';
-import { TaskWithNoId } from '../../types';
+import { Task } from '../../types';
 
-export default class TaskClass implements TaskWithNoId {
+export default class TaskClass implements Task {
+  id: number;
+
+  userId: number = 1;
+
   checks: Checks[] = [];
 
   completed: boolean = false;
@@ -11,4 +15,8 @@ export default class TaskClass implements TaskWithNoId {
   description: string = '';
 
   taskName: string = '';
+
+  constructor(id: number) {
+    this.id = id;
+  }
 }

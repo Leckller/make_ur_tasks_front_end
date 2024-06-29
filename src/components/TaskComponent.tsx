@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useAppDispatch } from '../hooks/reduxHooks';
 import { openEdit, viewTask } from '../redux/Reducers/Tasks';
-import { TaskWithNoId } from '../types';
+import { Task } from '../types';
 
-function TaskComponent({ task }: { task: TaskWithNoId }) {
+function TaskComponent({ task }: { task: Task }) {
   const dispatch = useAppDispatch();
   return (
     <div className="flex flex-row gap-3">

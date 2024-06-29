@@ -1,22 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
-import type { TaskWithNoId, TaskFields, PopupTypes } from '../../types';
+import type { TaskFields, PopupTypes, Task, User } from '../../types';
 import TaskClass from '../../components/Classes/TaskClass';
+import { LocalSaves } from '../../components/Classes/Saves';
+import { DataBase } from '../../service/Server';
 
 interface TaskState {
-  tasks: TaskWithNoId[],
+  tasks: Task[],
+  nextId: number,
   edit: { bool: boolean, type: PopupTypes },
-  coockingTask: TaskWithNoId,
+  coockingTask: Task,
 }
 
-const saveExists = localStorage.getItem('Task');
-
-const initialState: TaskState = saveExists ? JSON.parse(saveExists) : {
-  tasks: [],
-  edit: { bool: false, type: 'view' },
-  coockingTask: new TaskClass(),
-};
+const initialState: TaskState = LocalSaves.localGet('Task')
+  ? LocalSaves.localGet('Task') : {
+    tasks: [],
+    nextId: 1,
+    edit: { bool: false, type: 'view' },
+    coockingTask: new TaskClass(0),
+  };
 
 export const TaskSlice = createSlice({
   name: 'Task',
@@ -31,18 +34,28 @@ export const TaskSlice = createSlice({
       state.edit.bool = bool !== 0;
     },
     makeTask: (state, action: PayloadAction<{ field: TaskFields, value: any }>) => {
-      console.log(action.payload);
       const { field, value } = action.payload;
       state.coockingTask[field] = value as never;
     },
     resetCooking: (state) => {
-      state.coockingTask = new TaskClass();
+      state.coockingTask = new TaskClass(999999);
     },
-    addTask: (state, action: PayloadAction<TaskWithNoId>) => {
-      state.tasks.push(action.payload);
+    addTask: (state, action: PayloadAction<Task>) => {
+      const newTask = action.payload;
+      newTask.id = state.nextId;
+
+      const user: User | null = LocalSaves.localGet('User');
+      if (user) {
+        DataBase.criarTarefa(newTask).then((response) => {
+          alert(response);
+        });
+      }
+
+      state.tasks.push(newTask);
+      state.nextId += 1;
       localStorage.setItem('Task', JSON.stringify(state));
     },
-    viewTask: (state, action: PayloadAction<TaskWithNoId>) => {
+    viewTask: (state, action: PayloadAction<Task>) => {
       state.coockingTask = action.payload;
     },
   },

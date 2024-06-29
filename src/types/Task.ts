@@ -17,4 +17,4 @@ export type TaskFields = 'taskName' | 'deadline'
 
 export type TaskWithNoId = Omit<Omit<Task, 'id'>, 'userId'>;
 
-export type PopupTypes = 'edit' | 'add' | 'view';
+export type PopupTypes = 'edit' | 'add' | 'view' | 'login';

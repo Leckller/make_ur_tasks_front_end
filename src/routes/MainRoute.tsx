@@ -1,10 +1,8 @@
 import HeaderComponent from '../components/HeaderComponent';
 import Popup from '../components/Popup';
-import Add from '../components/PopupHtmls/Add';
-import Edit from '../components/PopupHtmls/Edit';
-import View from '../components/PopupHtmls/View';
 import TaskComponent from '../components/TaskComponent';
 import { useAppSelector } from '../hooks/reduxHooks';
+import popupGen from '../utils/popupGen';
 
 function MainRoute() {
   const { edit: open, tasks } = useAppSelector((state) => state.Task);
@@ -20,8 +18,7 @@ function MainRoute() {
       {open.bool && (
         <Popup>
           {
-            // eslint-disable-next-line no-nested-ternary
-            open.type === 'add' ? <Add /> : open.type === 'edit' ? <Edit /> : <View />
+            popupGen(open.type)
           }
         </Popup>
       )}
