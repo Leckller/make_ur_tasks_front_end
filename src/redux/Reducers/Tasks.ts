@@ -2,9 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import type { TaskFields, PopupTypes, Task, User } from '../../types';
-import TaskClass from '../../components/Classes/TaskClass';
 import { LocalSaves } from '../../components/Classes/Saves';
 import { DataBase } from '../../service/Server';
+import TaskClass from '../../components/Classes/TaskClass';
 
 interface TaskState {
   tasks: Task[],
@@ -18,7 +18,7 @@ const initialState: TaskState = LocalSaves.localGet('Task')
     tasks: [],
     nextId: 1,
     edit: { bool: false, type: 'view' },
-    coockingTask: new TaskClass(0),
+    coockingTask: {},
   };
 
 export const TaskSlice = createSlice({
@@ -38,11 +38,13 @@ export const TaskSlice = createSlice({
       state.coockingTask[field] = value as never;
     },
     resetCooking: (state) => {
-      state.coockingTask = new TaskClass(999999);
+      state.coockingTask = new TaskClass(99999);
     },
-    addTask: (state, action: PayloadAction<Task>) => {
-      const newTask = action.payload;
-      newTask.id = state.nextId;
+    addTask: (state) => {
+      const newTask = new TaskClass(state.nextId);
+      newTask.taskName = state.coockingTask.taskName;
+      newTask.description = state.coockingTask.description;
+      newTask.deadline = state.coockingTask.deadline;
 
       const user: User | null = LocalSaves.localGet('User');
       if (user) {
