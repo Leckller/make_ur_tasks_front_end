@@ -5,8 +5,6 @@ interface UserState {
   token: string,
 }
 
-// o nome vem do trecho de texto anterior ao "@" do email
-
 const initialState: UserState = LocalSaves.localGet('User')
   ? LocalSaves.localGet('User') : {
     token: '',

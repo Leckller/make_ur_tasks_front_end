@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { useAppDispatch } from '../../hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { setUser } from '../../redux/Reducers/User';
 import { DataBase } from '../../service/Server';
 
 function Login() {
   const dispatch = useAppDispatch();
+  const { type } = useAppSelector((s) => s.Task.edit);
   const [pass, setPass] = useState('');
   const [Email, setEmail] = useState('');
   return (
@@ -13,23 +14,41 @@ function Login() {
       className="flex justify-center flex-col gap-5"
     >
       <label>
-        Name
-        <input type="text" onChange={ ({ target: { value } }) => setEmail(value) } />
+        <h2>Email</h2>
+        <input
+          value={ Email }
+          type="text"
+          onChange={ ({ target: { value } }) => setEmail(value) }
+        />
       </label>
+
       <label>
-        Password
-        <input type="password" onChange={ ({ target: { value } }) => setPass(value) } />
+        <h2>Password</h2>
+        <input
+          value={ pass }
+          type="password"
+          onChange={ ({ target: { value } }) => setPass(value) }
+        />
       </label>
+
       <button
         onClick={ () => {
-          DataBase.cadastro({ email: Email, password: pass })
-            .then((r) => {
-              dispatch(setUser(r.data));
-              console.log(r);
-            });
+          if (type === 'cadastro') {
+            DataBase.cadastro({ email: Email, password: pass })
+              .then((r) => {
+                dispatch(setUser(r.data));
+                console.log(r);
+              });
+          } else {
+            DataBase.login({ email: Email, password: pass })
+              .then((r) => {
+                dispatch(setUser(r.data));
+                console.log(r);
+              });
+          }
         } }
       >
-        login / cadastro
+        {type === 'login' ? 'login' : 'cadastro'}
       </button>
     </form>
   );

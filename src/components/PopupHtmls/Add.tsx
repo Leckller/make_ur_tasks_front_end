@@ -1,11 +1,10 @@
-import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
+import { useAppDispatch } from '../../hooks/reduxHooks';
 import { addTask, makeTask, openEdit, resetCooking } from '../../redux/Reducers/Tasks';
 
 function Add() {
-  const task = useAppSelector((state) => state.Task.coockingTask);
   const dispatch = useAppDispatch();
   return (
-    <div
+    <form
       className="bg-white rounded-md h-[90%]
       flex flex-col justify-around
       "
@@ -49,13 +48,13 @@ function Add() {
       <button
         onClick={ () => {
           dispatch(openEdit({ bool: 0, type: 'view' }));
-          dispatch(addTask(task));
+          dispatch(addTask());
           dispatch(resetCooking());
         } }
       >
         Adicionar
       </button>
-    </div>
+    </form>
   );
 }
 
