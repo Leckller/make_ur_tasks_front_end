@@ -40,13 +40,13 @@ export const TaskSlice = createSlice({
     resetCooking: (state) => {
       state.coockingTask = new TaskClass(99999);
     },
-    addTask: (state) => {
+    addTask: (state, action: PayloadAction<string>) => {
       const newTask = new TaskClass(state.nextId);
       newTask.taskName = state.coockingTask.taskName;
       newTask.description = state.coockingTask.description;
       newTask.deadline = state.coockingTask.deadline;
 
-      const user: User | null = LocalSaves.localGet('User');
+      const user = action.payload;
       if (user) {
         DataBase.criarTarefa(newTask).then((response) => {
           alert(response);

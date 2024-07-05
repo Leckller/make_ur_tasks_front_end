@@ -4,6 +4,9 @@ import UserReducer from './Reducers/User';
 import ErrorsReducer from './Reducers/Errors';
 
 export const store = configureStore({
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(
+    { serializableCheck: false },
+  ),
   reducer: {
     Task: TaskReducer,
     User: UserReducer,

@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { setUser } from '../../redux/Reducers/User';
-import { DataBase } from '../../service/Server';
+import SignUp from '../../utils/SingUp';
+import { openEdit } from '../../redux/Reducers/Tasks';
 
 function Login() {
   const dispatch = useAppDispatch();
@@ -33,19 +34,10 @@ function Login() {
 
       <button
         onClick={ () => {
-          if (type === 'cadastro') {
-            DataBase.cadastro({ email: Email, password: pass })
-              .then((r) => {
-                dispatch(setUser(r.data));
-                console.log(r);
-              });
-          } else {
-            DataBase.login({ email: Email, password: pass })
-              .then((r) => {
-                dispatch(setUser(r.data));
-                console.log(r);
-              });
-          }
+          SignUp({ Email, pass }, type).then((response) => {
+            dispatch(setUser(response.data));
+            dispatch(openEdit({ bool: 0, type: 'view' }));
+          });
         } }
       >
         {type === 'login' ? 'login' : 'cadastro'}

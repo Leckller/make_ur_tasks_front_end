@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { LocalSaves } from '../../components/Classes/Saves';
+import { DataBase } from '../../service/Server';
 
 interface UserState {
   token: string,
@@ -15,7 +16,9 @@ export const UserSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action:PayloadAction<string>) => {
-      state.token = action.payload;
+      state.token = `Bearer: ${action.payload}`;
+      DataBase.auth = `Bearer: ${action.payload}`;
+      LocalSaves.localSave('User', state);
     },
   },
 });

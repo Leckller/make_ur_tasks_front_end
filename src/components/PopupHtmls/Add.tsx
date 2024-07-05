@@ -1,10 +1,14 @@
-import { useAppDispatch } from '../../hooks/reduxHooks';
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
 import { addTask, makeTask, openEdit, resetCooking } from '../../redux/Reducers/Tasks';
 
 function Add() {
+  const { token } = useAppSelector((s) => s.User);
   const dispatch = useAppDispatch();
   return (
     <form
+      onSubmit={ (e) => {
+        e.preventDefault();
+      } }
       className="bg-white rounded-md h-[90%]
       flex flex-col justify-around
       "
@@ -46,10 +50,13 @@ function Add() {
       {/* Adicionar Checks
       <button>Novo Check</button> */}
       <button
+        type="submit"
         onClick={ () => {
-          dispatch(openEdit({ bool: 0, type: 'view' }));
-          dispatch(addTask());
+          dispatch(addTask(token));
           dispatch(resetCooking());
+          setTimeout(() => {
+            dispatch(openEdit({ bool: 0, type: 'view' }));
+          }, 200);
         } }
       >
         Adicionar
