@@ -13,6 +13,8 @@ export default interface Task {
   userId: number
 }
 export type TaskFields = 'taskName' | 'deadline'
-| 'description' | 'checks' | 'completed' | 'userId';
+| 'description' | 'checks' | 'completed';
 
-export type TaskWithNoId = Omit<Task, 'id'>;
+export type TaskWithNoId = Omit<Omit<Task, 'id'>, 'userId'>;
+
+export type PopupTypes = 'edit' | 'add' | 'view' | 'login';
