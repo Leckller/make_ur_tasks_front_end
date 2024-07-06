@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../store';
-import type { TaskFields, PopupTypes, Task, User } from '../../types';
+import type { TaskFields, PopupTypes, Task } from '../../types';
 import { LocalSaves } from '../../components/Classes/Saves';
 import { DataBase } from '../../service/Server';
 import TaskClass from '../../components/Classes/TaskClass';
