@@ -10,7 +10,7 @@ function HeaderComponent() {
       <section className="flex flex-row gap-5">
         <button
           className="text-center border"
-          onClick={ () => dispatch(openEdit({ bool: 1, type: 'login' })) }
+          onClick={ () => dispatch(openEdit({ bool: 1, type: 'config' })) }
         >
           Configurações
         </button>

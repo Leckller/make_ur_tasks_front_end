@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 export interface SignFields {
   email: string,
   password: string
@@ -61,39 +62,75 @@ export default class Server implements ServerMethods {
   }
 
   async cadastro(fields: SignFields): Promise<ResponseServer<string>> {
-    const url = `${this.url}/user/cadastro`;
-    const data = await this.fetchServer(url, { body: fields, method: 'POST' });
-    return data;
+    try {
+      const url = `${this.url}/user/cadastro`;
+      const data = await this.fetchServer(url, { body: fields, method: 'POST' });
+      console.log(data.message);
+      return data;
+    } catch {
+      console.log('eita');
+      return { data: '', message: 'Erro no servidor!' };
+    }
   }
 
   async login(fields: SignFields): Promise<ResponseServer<string>> {
-    const url = `${this.url}/user/login`;
-    const data = await this.fetchServer(url, { body: fields, method: 'POST' });
-    return data;
+    try {
+      const url = `${this.url}/user/login`;
+      const data = await this.fetchServer(url, { body: fields, method: 'POST' });
+      console.log(data.message);
+      return data;
+    } catch {
+      console.log('eita');
+      return { data: '', message: 'Erro no servidor!' };
+    }
   }
 
   async criarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>> {
-    const url = `${this.url}/task/create`;
-    const data = await this.fetchServer(url, { body: fields, method: 'POST' });
-    return data;
+    try {
+      const url = `${this.url}/task/create`;
+      const data = await this.fetchServer(url, { body: fields, method: 'POST' });
+      console.log(data.message);
+      return data;
+    } catch {
+      console.log('eita');
+      return { data: { data: false, message: '' }, message: 'Erro no servidor!' };
+    }
   }
 
   async deletarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>> {
-    const url = `${this.url}/task/delete`;
-    const data = await this.fetchServer(url, { body: fields, method: 'DELETE' });
-    return data;
+    try {
+      const url = `${this.url}/task/delete`;
+      const data = await this.fetchServer(url, { body: fields, method: 'DELETE' });
+      console.log(data.message);
+      return data;
+    } catch {
+      console.log('eita');
+      return { data: { data: false, message: '' }, message: 'Erro no servidor!' };
+    }
   }
 
   async editarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>> {
-    const url = `${this.url}/task/edit`;
-    const data = await this.fetchServer(url, { body: fields, method: 'UPDATE' });
-    return data;
+    try {
+      const url = `${this.url}/task/edit`;
+      const data = await this.fetchServer(url, { body: fields, method: 'UPDATE' });
+      console.log(data.message);
+      return data;
+    } catch {
+      console.log('eita');
+      return { data: { data: false, message: '' }, message: 'Erro no servidor!' };
+    }
   }
 
   async todasTarefas(userId: number): Promise<ResponseServer<ResponseServer<Task[]>>> {
-    const url = `${this.url}/task`;
-    const data = await this.fetchServer(url, { body: { userId }, method: 'GET' });
-    return data;
+    try {
+      const url = `${this.url}/task`;
+      const data = await this.fetchServer(url, { body: { userId }, method: 'GET' });
+      console.log(data.message);
+      return data;
+    } catch {
+      console.log('eita');
+      return { data: { data: [], message: '' }, message: 'Erro no servidor!' };
+    }
   }
 }
 
