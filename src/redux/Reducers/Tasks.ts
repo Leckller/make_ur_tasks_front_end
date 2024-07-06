@@ -32,6 +32,7 @@ export const TaskSlice = createSlice({
       const { type, bool } = action.payload;
       state.edit.type = type;
       state.edit.bool = bool !== 0;
+      LocalSaves.localSave('Task', state);
     },
     makeTask: (state, action: PayloadAction<{ field: TaskFields, value: any }>) => {
       const { field, value } = action.payload;
