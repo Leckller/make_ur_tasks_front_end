@@ -1,12 +1,9 @@
-import { Checks } from '../../service/Server';
 import { Task } from '../../types';
 
 export default class TaskClass implements Task {
   id: number;
 
   userId: number = 1;
-
-  checks: Checks[] = [];
 
   completed: boolean = false;
 

@@ -4,16 +4,10 @@ export interface SignFields {
   password: string
 }
 
-export interface Checks {
-  text: string,
-  completed: boolean,
-}
-
 export interface Task {
   taskName: string;
   deadline: Date;
   description: string;
-  checks: Checks[]
   completed: boolean
   userId: number
 }
