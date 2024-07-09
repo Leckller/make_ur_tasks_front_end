@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import type { RootState } from '../store';
 import type { TaskFields, PopupTypes, Task } from '../../types';
 import { LocalSaves } from '../../components/Classes/Saves';
@@ -32,10 +32,12 @@ export const TaskSlice = createSlice({
       const { type, bool } = action.payload;
       state.edit.type = type;
       state.edit.bool = bool !== 0;
+      LocalSaves.localSave('Task', state);
     },
     makeTask: (state, action: PayloadAction<{ field: TaskFields, value: any }>) => {
       const { field, value } = action.payload;
       state.coockingTask[field] = value as never;
+      LocalSaves.localSave('Task', state);
     },
     resetCooking: (state) => {
       state.coockingTask = new TaskClass(99999);
@@ -55,15 +57,32 @@ export const TaskSlice = createSlice({
 
       state.tasks.push(newTask);
       state.nextId += 1;
-      localStorage.setItem('Task', JSON.stringify(state));
+      LocalSaves.localSave('Task', state);
     },
     viewTask: (state, action: PayloadAction<Task>) => {
       state.coockingTask = action.payload;
     },
+    deleteTask: (state, action: PayloadAction<Task>) => {
+      state.tasks = state.tasks
+        .filter((task) => Number(task.id) !== Number(action.payload.id));
+      // DataBase.deletarTarefa(action.payload);
+      LocalSaves.localSave('Task', state);
+    },
+    toggleTask: (state, action:PayloadAction<Task>) => {
+      const findTask = state.tasks.findIndex(({ id }) => id === action.payload.id);
+      state.tasks[findTask].completed = !state.tasks[findTask].completed;
+      LocalSaves.localSave('Task', state);
+    },
+    editTask: (state, action: PayloadAction<Task>) => {
+      const findTask = state.tasks.findIndex(({ id }) => id === action.payload.id);
+      state.tasks[findTask] = action.payload;
+      LocalSaves.localSave('Task', state);
+    },
   },
 });
 
-export const { makeTask, addTask, openEdit, resetCooking, viewTask } = TaskSlice.actions;
+export const { editTask, deleteTask, makeTask, toggleTask,
+  addTask, openEdit, resetCooking, viewTask } = TaskSlice.actions;
 
 export const selectCount = (state: RootState) => state.Task;
 
