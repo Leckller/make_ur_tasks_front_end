@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { BsPencil } from 'react-icons/bs';
 import { useAppDispatch } from '../hooks/reduxHooks';
