@@ -1,10 +1,14 @@
 /* eslint-disable sonarjs/no-duplicate-string */
+import { LocalSaves } from '../components/Classes/Saves';
+import TaskClass from '../components/Classes/TaskClass';
+
 export interface SignFields {
   email: string,
   password: string
 }
 
 export interface Task {
+  id: number,
   taskName: string;
   deadline: Date;
   description: string;
@@ -20,7 +24,7 @@ export type ResponseServer<DataType> = {
 export interface ServerMethods {
   cadastro(fields: SignFields): Promise<ResponseServer<string>>
   login(fields: SignFields): Promise<ResponseServer<string>>
-  criarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>>
+  criarTarefa(fields: Task): Promise<ResponseServer<TaskClass>>
   editarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>>
   deletarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>>
   todasTarefas(userId: number): Promise<ResponseServer<ResponseServer<Task[]>>>
@@ -79,15 +83,13 @@ export default class Server implements ServerMethods {
     }
   }
 
-  async criarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>> {
+  async criarTarefa(fields: Task): Promise<ResponseServer<Task>> {
     try {
       const url = `${this.url}/task/create`;
       const data = await this.fetchServer(url, { body: fields, method: 'POST' });
-      console.log(data.message);
       return data;
     } catch {
-      console.log('eita');
-      return { data: { data: false, message: '' }, message: 'Erro no servidor!' };
+      return { data: {} as Task, message: 'Erro no servidor!' };
     }
   }
 
@@ -128,7 +130,4 @@ export default class Server implements ServerMethods {
   }
 }
 
-const localToken = localStorage.getItem('token');
-const token = localToken ? JSON.parse(localToken) : '';
-
-export const DataBase = new Server(token);
+export const DataBase = new Server(LocalSaves.localGet('User').token);

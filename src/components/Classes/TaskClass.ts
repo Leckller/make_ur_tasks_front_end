@@ -9,11 +9,14 @@ export default class TaskClass implements Task {
 
   deadline: Date = '24/01/2005' as unknown as Date;
 
-  description: string = '';
+  description: string;
 
-  taskName: string = '';
+  taskName: string;
 
-  constructor(id: number) {
+  constructor(id = 99999, taskName = '', description = '', deadline = new Date()) {
     this.id = id;
+    this.deadline = deadline;
+    this.description = description;
+    this.taskName = taskName;
   }
 }

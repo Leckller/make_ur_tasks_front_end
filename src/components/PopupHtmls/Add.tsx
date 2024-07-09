@@ -46,9 +46,6 @@ function Add() {
           type="text"
         />
       </label>
-      {/* para implementar */}
-      {/* Adicionar Checks
-      <button>Novo Check</button> */}
       <button
         type="submit"
         onClick={ () => {

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../store';
 import type { TaskFields, PopupTypes, Task } from '../../types';
@@ -21,6 +21,8 @@ const initialState: TaskState = LocalSaves.localGet('Task')
     coockingTask: {},
   };
 
+// const fetchTeste = createAsyncThunk({});
+
 export const TaskSlice = createSlice({
   name: 'Task',
   initialState,
@@ -40,23 +42,22 @@ export const TaskSlice = createSlice({
       LocalSaves.localSave('Task', state);
     },
     resetCooking: (state) => {
-      state.coockingTask = new TaskClass(99999);
+      state.coockingTask = new TaskClass();
     },
     addTask: (state, action: PayloadAction<string>) => {
-      const newTask = new TaskClass(state.nextId);
-      newTask.taskName = state.coockingTask.taskName;
-      newTask.description = state.coockingTask.description;
-      newTask.deadline = state.coockingTask.deadline;
+      const { deadline, description, taskName } = state.coockingTask;
+      const newTask = new TaskClass(state.nextId, taskName, description, deadline);
 
       const user = action.payload;
       if (user) {
         DataBase.criarTarefa(newTask).then((response) => {
-          alert(response);
+          state.tasks.push(response.data);
+          alert(response.message);
         });
+      } else {
+        state.tasks.push(newTask);
+        state.nextId += 1;
       }
-
-      state.tasks.push(newTask);
-      state.nextId += 1;
       LocalSaves.localSave('Task', state);
     },
     viewTask: (state, action: PayloadAction<Task>) => {
@@ -65,7 +66,9 @@ export const TaskSlice = createSlice({
     deleteTask: (state, action: PayloadAction<Task>) => {
       state.tasks = state.tasks
         .filter((task) => Number(task.id) !== Number(action.payload.id));
-      // DataBase.deletarTarefa(action.payload);
+      DataBase.deletarTarefa(action.payload).then((response) => {
+        alert(response.message);
+      });
       LocalSaves.localSave('Task', state);
     },
     toggleTask: (state, action:PayloadAction<Task>) => {
