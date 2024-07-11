@@ -1,9 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../store';
 import type { TaskFields, PopupTypes, Task } from '../../types';
 import { LocalSaves } from '../../components/Classes/Saves';
-import { DataBase, SignFields } from '../../service/Server';
+import { DataBase } from '../../service/Server';
 import TaskClass from '../../components/Classes/TaskClass';
 import { DatabaseThunk } from './Server';
 
@@ -46,9 +46,9 @@ export const TaskSlice = createSlice({
     viewTask: (state, action: PayloadAction<Task>) => {
       state.coockingTask = action.payload;
     },
-    deleteTask: (state, action: PayloadAction<Task>) => {
+    deleteTask: (state, action: PayloadAction<number>) => {
       state.tasks = state.tasks
-        .filter((task) => Number(task.id) !== Number(action.payload.id));
+        .filter((task) => Number(task.id) !== Number(action.payload));
       DataBase.deletarTarefa(action.payload).then((response) => {
         alert(response.message);
       });

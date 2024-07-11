@@ -25,9 +25,9 @@ export interface ServerMethods {
   cadastro(fields: SignFields): Promise<ResponseServer<string>>
   login(fields: SignFields): Promise<ResponseServer<string>>
   criarTarefa(fields: Task): Promise<ResponseServer<TaskClass>>
-  editarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>>
-  deletarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>>
-  todasTarefas(userId: number): Promise<ResponseServer<ResponseServer<Task[]>>>
+  editarTarefa(fields: Task): Promise<ResponseServer<boolean>>
+  deletarTarefa(taskId: number): Promise<ResponseServer<boolean>>
+  todasTarefas(userId: number): Promise<ResponseServer<Task[]>>
 }
 
 export type FetchOptions = {
@@ -66,7 +66,6 @@ export default class Server implements ServerMethods {
       console.log(data.message);
       return data;
     } catch {
-      console.log('eita');
       return { data: '', message: 'Erro no servidor!' };
     }
   }
@@ -78,7 +77,6 @@ export default class Server implements ServerMethods {
       console.log(data.message);
       return data;
     } catch {
-      console.log('eita');
       return { data: '', message: 'Erro no servidor!' };
     }
   }
@@ -93,39 +91,36 @@ export default class Server implements ServerMethods {
     }
   }
 
-  async deletarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>> {
+  async deletarTarefa(taskId: number): Promise<ResponseServer<boolean>> {
     try {
       const url = `${this.url}/task/delete`;
-      const data = await this.fetchServer(url, { body: fields, method: 'DELETE' });
+      const data = await this.fetchServer(url, { body: { taskId }, method: 'DELETE' });
       console.log(data.message);
       return data;
     } catch {
-      console.log('eita');
-      return { data: { data: false, message: '' }, message: 'Erro no servidor!' };
+      return { data: false, message: 'Erro no servidor!' };
     }
   }
 
-  async editarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>> {
+  async editarTarefa(fields: Task): Promise<ResponseServer<boolean>> {
     try {
       const url = `${this.url}/task/edit`;
       const data = await this.fetchServer(url, { body: fields, method: 'UPDATE' });
       console.log(data.message);
       return data;
     } catch {
-      console.log('eita');
-      return { data: { data: false, message: '' }, message: 'Erro no servidor!' };
+      return { data: false, message: 'Erro no servidor!' };
     }
   }
 
-  async todasTarefas(userId: number): Promise<ResponseServer<ResponseServer<Task[]>>> {
+  async todasTarefas(userId: number): Promise<ResponseServer<Task[]>> {
     try {
       const url = `${this.url}/task`;
       const data = await this.fetchServer(url, { body: { userId }, method: 'GET' });
       console.log(data.message);
       return data;
     } catch {
-      console.log('eita');
-      return { data: { data: [], message: '' }, message: 'Erro no servidor!' };
+      return { data: [], message: 'Erro no servidor!' };
     }
   }
 }

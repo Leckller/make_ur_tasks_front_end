@@ -27,7 +27,7 @@ function TaskComponent({ task }: { task: Task }) {
         <p>{task.taskName}</p>
       </button>
 
-      <FaRegTrashAlt onClick={ () => dispatch(deleteTask(task)) } />
+      <FaRegTrashAlt onClick={ () => dispatch(deleteTask(task.id)) } />
       <BsPencil
         onClick={ () => {
           dispatch(openEdit({ type: 'edit', bool: 1 }));
