@@ -63,7 +63,6 @@ export default class Server implements ServerMethods {
     try {
       const url = `${this.url}/user/cadastro`;
       const data = await this.fetchServer(url, { body: fields, method: 'POST' });
-      console.log(data.message);
       return data;
     } catch {
       return { data: '', message: 'Erro no servidor!' };
@@ -74,7 +73,6 @@ export default class Server implements ServerMethods {
     try {
       const url = `${this.url}/user/login`;
       const data = await this.fetchServer(url, { body: fields, method: 'POST' });
-      console.log(data.message);
       return data;
     } catch {
       return { data: '', message: 'Erro no servidor!' };
@@ -95,7 +93,6 @@ export default class Server implements ServerMethods {
     try {
       const url = `${this.url}/task/delete`;
       const data = await this.fetchServer(url, { body: { taskId }, method: 'DELETE' });
-      console.log(data.message);
       return data;
     } catch {
       return { data: false, message: 'Erro no servidor!' };
@@ -106,7 +103,6 @@ export default class Server implements ServerMethods {
     try {
       const url = `${this.url}/task/edit`;
       const data = await this.fetchServer(url, { body: fields, method: 'UPDATE' });
-      console.log(data.message);
       return data;
     } catch {
       return { data: false, message: 'Erro no servidor!' };
@@ -117,7 +113,6 @@ export default class Server implements ServerMethods {
     try {
       const url = `${this.url}/task`;
       const data = await this.fetchServer(url, { body: { userId }, method: 'GET' });
-      console.log(data.message);
       return data;
     } catch {
       return { data: [], message: 'Erro no servidor!' };

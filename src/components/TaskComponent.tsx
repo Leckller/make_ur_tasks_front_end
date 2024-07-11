@@ -1,11 +1,13 @@
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { BsPencil } from 'react-icons/bs';
-import { useAppDispatch } from '../hooks/reduxHooks';
-import { deleteTask, openEdit, toggleTask, viewTask } from '../redux/Reducers/Tasks';
+import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
+import { openEdit, toggleTask, viewTask } from '../redux/Reducers/Tasks';
 import { Task } from '../types';
+import { DatabaseThunk } from '../redux/Reducers/Server';
 
 function TaskComponent({ task }: { task: Task }) {
   const dispatch = useAppDispatch();
+  const { User: { token } } = useAppSelector((s) => s);
   return (
     <div
       className="flex flex-row gap-3 items-center flex-nowrap w-[90%]
@@ -27,7 +29,10 @@ function TaskComponent({ task }: { task: Task }) {
         <p>{task.taskName}</p>
       </button>
 
-      <FaRegTrashAlt onClick={ () => dispatch(deleteTask(task.id)) } />
+      <FaRegTrashAlt
+        onClick={ () => dispatch(DatabaseThunk
+          .deletarTarefaThunk(token.length > 20)(task.id)) }
+      />
       <BsPencil
         onClick={ () => {
           dispatch(openEdit({ type: 'edit', bool: 1 }));
