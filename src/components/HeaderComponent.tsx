@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { IoMdAdd } from 'react-icons/io';
 import { GrConfigure } from 'react-icons/gr';
 import { useState } from 'react';
@@ -18,21 +19,17 @@ function HeaderComponent() {
         Make Ur Tasks!
       </h1>
       <section className="flex flex-row gap-5">
-        {(token.length > 20 && !clicked) ? (
+        {(token.length > 20 && !clicked) && (
           <button
             onClick={ () => {
               setClicked(true);
-              setTimeout(() => {
-                setClicked(false);
-              }, 5000);
               dispatch(DatabaseThunk.todasTarefasThunk(token.length > 20)());
             } }
           >
             sincronizar com banco de dados
           </button>
-        ) : (
-          <h2>tarefas sincronizadas!</h2>
-        )}
+        ) }
+
         <IoMdAdd
           className="w-10 h-10 border rounded-full p-2"
           onClick={ () => {

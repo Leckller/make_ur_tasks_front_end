@@ -31,7 +31,7 @@ export interface ServerMethods {
 }
 
 export type FetchOptions = {
-  method: 'POST' | 'GET' | 'DELETE' | 'UPDATE',
+  method: 'POST' | 'GET' | 'DELETE' | 'PATCH',
   body: any,
 };
 
@@ -114,7 +114,7 @@ export default class Server implements ServerMethods {
   async editarTarefa(fields: Task): Promise<ResponseServer<boolean>> {
     try {
       const url = `${this.url}/task/edit`;
-      const data = await this.fetchServer(url, { body: fields, method: 'UPDATE' });
+      const data = await this.fetchServer(url, { body: fields, method: 'PATCH' });
       return data;
     } catch {
       return { data: false, message: 'Erro no servidor!' };

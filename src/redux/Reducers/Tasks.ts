@@ -46,16 +46,6 @@ export const TaskSlice = createSlice({
     viewTask: (state, action: PayloadAction<Task>) => {
       state.coockingTask = action.payload;
     },
-    toggleTask: (state, action: PayloadAction<Task>) => {
-      const findTask = state.tasks.findIndex(({ id }) => id === action.payload.id);
-      state.tasks[findTask].completed = !state.tasks[findTask].completed;
-      LocalSaves.localSave('Task', state);
-    },
-    editTask: (state, action: PayloadAction<Task>) => {
-      const findTask = state.tasks.findIndex(({ id }) => id === action.payload.id);
-      state.tasks[findTask] = action.payload;
-      LocalSaves.localSave('Task', state);
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(DatabaseThunk.criarTarefaThunk(false)
@@ -66,6 +56,13 @@ export const TaskSlice = createSlice({
       } catch {
         console.log('Parece que algo deu errado');
       }
+    });
+
+    builder.addCase(DatabaseThunk
+      .alternarTarefaThunk(false).fulfilled, (state, _action) => {
+      const findTask = state.tasks.findIndex(({ id }) => id === state.coockingTask.id);
+      state.tasks[findTask].completed = !state.tasks[findTask].completed;
+      LocalSaves.localSave('Task', state);
     });
 
     builder.addCase(
@@ -87,11 +84,17 @@ export const TaskSlice = createSlice({
         console.log('Parece que algo deu errado');
       }
     });
+
+    builder.addCase(DatabaseThunk
+      .editarTarefaThunk(false).fulfilled, (state, _action) => {
+      const findTask = state.tasks.findIndex(({ id }) => id === state.coockingTask.id);
+      state.tasks[findTask] = state.coockingTask;
+      LocalSaves.localSave('Task', state);
+    });
   },
 });
 
-export const { editTask, makeTask, toggleTask,
-  openEdit, resetCooking, viewTask } = TaskSlice.actions;
+export const { makeTask, openEdit, resetCooking, viewTask } = TaskSlice.actions;
 
 export const selectCount = (state: RootState) => state.Task;
 

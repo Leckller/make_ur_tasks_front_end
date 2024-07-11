@@ -1,7 +1,7 @@
-import { FaRegTrashAlt } from 'react-icons/fa';
+import { FaCircle, FaRegTrashAlt } from 'react-icons/fa';
 import { BsPencil } from 'react-icons/bs';
 import { useAppDispatch, useAppSelector } from '../hooks/reduxHooks';
-import { openEdit, toggleTask, viewTask } from '../redux/Reducers/Tasks';
+import { openEdit, viewTask } from '../redux/Reducers/Tasks';
 import { Task } from '../types';
 import { DatabaseThunk } from '../redux/Reducers/Server';
 
@@ -13,12 +13,17 @@ function TaskComponent({ task }: { task: Task }) {
       className="flex flex-row gap-3 items-center flex-nowrap w-[90%]
       border-4 border-black rounded-md p-2 max-w-[500px]"
     >
-      <input
-        type="checkbox"
-        checked={ task.completed }
-        onChange={ () => dispatch(toggleTask(task)) }
-        className={ `${task.completed ? 'bg-green-500' : 'bg-red-500'} w-5 h-5` }
-      />
+      <button
+        onClick={ () => {
+          dispatch(DatabaseThunk
+            .alternarTarefaThunk(token.length > 20)({
+              ...task, completed: !task.completed,
+            }));
+        } }
+      >
+        {task.completed ? <FaCircle className="text-green-500" />
+          : <FaCircle className="text-red-500" />}
+      </button>
       <button
         className="font-semibold w-[80%] break-words"
         onClick={ () => {
