@@ -3,8 +3,9 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import type { TaskFields, PopupTypes, Task } from '../../types';
 import { LocalSaves } from '../../components/Classes/Saves';
-import { DataBase } from '../../service/Server';
+import { DataBase, SignFields } from '../../service/Server';
 import TaskClass from '../../components/Classes/TaskClass';
+import { DatabaseThunk } from './Server';
 
 interface TaskState {
   tasks: Task[],
@@ -20,8 +21,6 @@ const initialState: TaskState = LocalSaves.localGet('Task')
     edit: { bool: false, type: 'view' },
     coockingTask: {},
   };
-
-// const fetchTeste = createAsyncThunk({});
 
 export const TaskSlice = createSlice({
   name: 'Task',
@@ -43,22 +42,6 @@ export const TaskSlice = createSlice({
     },
     resetCooking: (state) => {
       state.coockingTask = new TaskClass();
-    },
-    addTask: (state, action: PayloadAction<string>) => {
-      const { deadline, description, taskName } = state.coockingTask;
-      const newTask = new TaskClass(state.nextId, taskName, description, deadline);
-
-      const user = action.payload;
-      if (user) {
-        DataBase.criarTarefa(newTask).then((response) => {
-          state.tasks.push(response.data);
-          alert(response.message);
-        });
-      } else {
-        state.tasks.push(newTask);
-        state.nextId += 1;
-      }
-      LocalSaves.localSave('Task', state);
     },
     viewTask: (state, action: PayloadAction<Task>) => {
       state.coockingTask = action.payload;
@@ -82,10 +65,24 @@ export const TaskSlice = createSlice({
       LocalSaves.localSave('Task', state);
     },
   },
+  extraReducers: (builder) => {
+    // builder.addCase(DatabaseThunk.cadastroThunk(), (state, action) => {
+    //   state.tasks = action.payload.data;
+    //   LocalSaves.localSave('Task', state);
+    // });
+    builder.addCase(DatabaseThunk.criarTarefaThunk(false).fulfilled, (state, action) => {
+      try {
+        state.tasks.push(action.payload);
+        LocalSaves.localSave('Task', state);
+      } catch {
+        console.log('Parece que algo deu errado');
+      }
+    });
+  },
 });
 
 export const { editTask, deleteTask, makeTask, toggleTask,
-  addTask, openEdit, resetCooking, viewTask } = TaskSlice.actions;
+  openEdit, resetCooking, viewTask } = TaskSlice.actions;
 
 export const selectCount = (state: RootState) => state.Task;
 

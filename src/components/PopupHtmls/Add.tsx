@@ -1,8 +1,9 @@
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { addTask, makeTask, openEdit, resetCooking } from '../../redux/Reducers/Tasks';
+import { DatabaseThunk } from '../../redux/Reducers/Server';
+import { makeTask, openEdit, resetCooking } from '../../redux/Reducers/Tasks';
 
 function Add() {
-  const { token } = useAppSelector((s) => s.User);
+  const { User: { token }, Task: { coockingTask: task } } = useAppSelector((s) => s);
   const dispatch = useAppDispatch();
   return (
     <form
@@ -49,7 +50,7 @@ function Add() {
       <button
         type="submit"
         onClick={ () => {
-          dispatch(addTask(token));
+          dispatch(DatabaseThunk.criarTarefaThunk(token.length > 20)(task));
           dispatch(resetCooking());
           setTimeout(() => {
             dispatch(openEdit({ bool: 0, type: 'view' }));
