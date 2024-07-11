@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { setUser } from '../../redux/Reducers/User';
-import SignUp from '../../utils/SingUp';
 import { openEdit } from '../../redux/Reducers/Tasks';
+import { DatabaseThunk } from '../../redux/Reducers/Server';
 
 function Login() {
   const dispatch = useAppDispatch();
   const { type } = useAppSelector((s) => s.Task.edit);
   const [pass, setPass] = useState('');
-  const [Email, setEmail] = useState('');
+  const [email, setEmail] = useState('');
   return (
     <form
       onSubmit={ (e) => e.preventDefault() }
@@ -17,7 +16,7 @@ function Login() {
       <label>
         <h2>Email</h2>
         <input
-          value={ Email }
+          value={ email }
           type="text"
           onChange={ ({ target: { value } }) => setEmail(value) }
         />
@@ -34,10 +33,12 @@ function Login() {
 
       <button
         onClick={ () => {
-          SignUp({ Email, pass }, type).then((response) => {
-            dispatch(setUser(response.data));
-            dispatch(openEdit({ bool: 0, type: 'view' }));
-          });
+          if (type === 'login') {
+            dispatch(DatabaseThunk.loginThunk()({ email, password: pass }));
+          } else {
+            dispatch(DatabaseThunk.cadastroThunk()({ email, password: pass }));
+          }
+          dispatch(openEdit({ bool: 0, type: 'view' }));
         } }
       >
         {type === 'login' ? 'login' : 'cadastro'}

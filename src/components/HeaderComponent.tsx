@@ -1,7 +1,7 @@
 import { IoMdAdd } from 'react-icons/io';
 import { GrConfigure } from 'react-icons/gr';
 import { useAppDispatch } from '../hooks/reduxHooks';
-import { openEdit } from '../redux/Reducers/Tasks';
+import { makeTask, openEdit } from '../redux/Reducers/Tasks';
 
 function HeaderComponent() {
   const dispatch = useAppDispatch();
@@ -14,11 +14,17 @@ function HeaderComponent() {
       <section className="flex flex-row gap-5">
         <IoMdAdd
           className="w-10 h-10 border rounded-full p-2"
-          onClick={ () => dispatch(openEdit({ bool: 1, type: 'add' })) }
+          onClick={ () => {
+            dispatch(makeTask({ field: 'taskName', value: 'Nova Tarefa' }));
+            dispatch(openEdit({ bool: 1, type: 'add' }));
+          } }
         />
         <GrConfigure
           className="w-10 h-10 border rounded-full p-2"
-          onClick={ () => dispatch(openEdit({ bool: 1, type: 'config' })) }
+          onClick={ () => {
+            dispatch(makeTask({ field: 'taskName', value: 'Configurações' }));
+            dispatch(openEdit({ bool: 1, type: 'config' }));
+          } }
         />
       </section>
     </header>

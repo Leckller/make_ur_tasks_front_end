@@ -7,6 +7,10 @@ export default class Saves {
   public localSave = (key: string, value: any): void => {
     localStorage.setItem(key, JSON.stringify(value));
   };
+
+  public deleteSave = (key: string) => {
+    localStorage.removeItem(key);
+  };
 }
 
 export const LocalSaves = new Saves();
