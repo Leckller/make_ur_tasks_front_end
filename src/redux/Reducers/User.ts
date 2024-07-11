@@ -18,16 +18,16 @@ export const UserSlice = createSlice({
   reducers: { },
   extraReducers: (builder) => {
     builder.addCase(DatabaseThunk.cadastroThunk().fulfilled, (state, action) => {
+      LocalSaves.deleteSave('Task');
       state.token = `Bearer: ${action.payload}`;
       DataBase.auth = `Bearer: ${action.payload}`;
       LocalSaves.localSave('User', state);
-      LocalSaves.deleteSave('Task');
     });
     builder.addCase(DatabaseThunk.loginThunk().fulfilled, (state, action) => {
-      state.token = `Bearer: ${action.payload}`;
-      DataBase.auth = `Bearer: ${action.payload}`;
-      LocalSaves.localSave('User', state);
       LocalSaves.deleteSave('Task');
+      state.token = `Bearer: ${action.payload}`;
+      DatabaseThunk.auth = `Bearer: ${action.payload}`;
+      LocalSaves.localSave('User', state);
     });
   },
 });

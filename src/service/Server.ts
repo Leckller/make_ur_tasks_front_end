@@ -42,6 +42,18 @@ export default class Server implements ServerMethods {
 
   protected async fetchServer(url: string, options: FetchOptions)
     : Promise<ResponseServer<any>> {
+    if (options.method === 'GET') {
+      const request = await fetch(url, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          auth: this.auth,
+        },
+      });
+      const data = await request.json();
+      return data;
+    }
     const request = await fetch(url, {
       method: options.method,
       mode: 'cors',
@@ -109,15 +121,16 @@ export default class Server implements ServerMethods {
     }
   }
 
-  async todasTarefas(userId: number): Promise<ResponseServer<Task[]>> {
+  async todasTarefas(): Promise<ResponseServer<Task[]>> {
     try {
       const url = `${this.url}/task`;
-      const data = await this.fetchServer(url, { body: { userId }, method: 'GET' });
+      const data = await this.fetchServer(url, { body: {}, method: 'GET' });
       return data;
-    } catch {
+    } catch (err) {
+      console.log(err);
       return { data: [], message: 'Erro no servidor!' };
     }
   }
 }
 
-export const DataBase = new Server(LocalSaves.localGet('User').token);
+export const DataBase = new Server(LocalSaves.localGet('User')?.token);

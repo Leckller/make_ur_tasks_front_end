@@ -14,7 +14,7 @@ export default class ServerThunk extends Server {
         showConfirmButton: false,
         timer: 1500,
       });
-      return data;
+      return data.data;
     });
     return fetch;
   }
@@ -70,6 +70,24 @@ export default class ServerThunk extends Server {
     });
     return fetch;
   }
+
+  todasTarefasThunk(logado: boolean) {
+    const fetch = createAsyncThunk('todas tarefas', async () => {
+      if (logado) {
+        const data = await DataBase.todasTarefas();
+        Swal.fire({
+          position: 'center',
+          icon: 'info',
+          title: 'Tarefas sincronizadas',
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        return data.data;
+      }
+      return [];
+    });
+    return fetch;
+  }
 }
 
-export const DatabaseThunk = new ServerThunk(LocalSaves.localGet('User').token);
+export const DatabaseThunk = new ServerThunk(LocalSaves.localGet('User')?.token);

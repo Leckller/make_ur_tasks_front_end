@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { RootState } from '../store';
@@ -79,6 +80,13 @@ export const TaskSlice = createSlice({
         }
       },
     );
+    builder.addCase(DatabaseThunk.todasTarefasThunk(false).fulfilled, (state, action) => {
+      try {
+        state.tasks = action.payload;
+      } catch {
+        console.log('Parece que algo deu errado');
+      }
+    });
   },
 });
 
