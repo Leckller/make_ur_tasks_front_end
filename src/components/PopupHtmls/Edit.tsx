@@ -1,9 +1,10 @@
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { editTask, makeTask, openEdit } from '../../redux/Reducers/Tasks';
+import { DatabaseThunk } from '../../redux/Reducers/Server';
+import { makeTask, openEdit } from '../../redux/Reducers/Tasks';
 
 function Edit() {
   const dispatch = useAppDispatch();
-  const task = useAppSelector((s) => s.Task.coockingTask);
+  const { Task: { coockingTask: task }, User: { token } } = useAppSelector((s) => s);
   return (
     <form
       className="bg-white rounded-md h-[90%]
@@ -47,7 +48,12 @@ function Edit() {
         />
       </label>
 
-      <button type="submit" onClick={ () => dispatch(editTask(task)) }>
+      <button
+        type="submit"
+        onClick={ () => {
+          dispatch(DatabaseThunk.editarTarefaThunk(token.length > 20)(task));
+        } }
+      >
         Concluir
       </button>
     </form>

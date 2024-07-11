@@ -1,7 +1,6 @@
 import { Task } from '../types';
 
 export const mockTask = [{
-  checks: [{}],
   completed: false,
   deadline: new Date(),
   description: 'Termina esse diabo zé',

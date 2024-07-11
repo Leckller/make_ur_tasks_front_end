@@ -1,19 +1,17 @@
 /* eslint-disable sonarjs/no-duplicate-string */
+import { LocalSaves } from '../components/Classes/Saves';
+import TaskClass from '../components/Classes/TaskClass';
+
 export interface SignFields {
   email: string,
   password: string
 }
 
-export interface Checks {
-  text: string,
-  completed: boolean,
-}
-
 export interface Task {
+  id: number,
   taskName: string;
   deadline: Date;
   description: string;
-  checks: Checks[]
   completed: boolean
   userId: number
 }
@@ -26,14 +24,14 @@ export type ResponseServer<DataType> = {
 export interface ServerMethods {
   cadastro(fields: SignFields): Promise<ResponseServer<string>>
   login(fields: SignFields): Promise<ResponseServer<string>>
-  criarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>>
-  editarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>>
-  deletarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>>
-  todasTarefas(userId: number): Promise<ResponseServer<ResponseServer<Task[]>>>
+  criarTarefa(fields: Task): Promise<ResponseServer<TaskClass>>
+  editarTarefa(fields: Task): Promise<ResponseServer<boolean>>
+  deletarTarefa(taskId: number): Promise<ResponseServer<boolean>>
+  todasTarefas(userId: number): Promise<ResponseServer<Task[]>>
 }
 
 export type FetchOptions = {
-  method: 'POST' | 'GET' | 'DELETE' | 'UPDATE',
+  method: 'POST' | 'GET' | 'DELETE' | 'PATCH',
   body: any,
 };
 
@@ -44,6 +42,18 @@ export default class Server implements ServerMethods {
 
   protected async fetchServer(url: string, options: FetchOptions)
     : Promise<ResponseServer<any>> {
+    if (options.method === 'GET') {
+      const request = await fetch(url, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json',
+          auth: this.auth,
+        },
+      });
+      const data = await request.json();
+      return data;
+    }
     const request = await fetch(url, {
       method: options.method,
       mode: 'cors',
@@ -65,10 +75,8 @@ export default class Server implements ServerMethods {
     try {
       const url = `${this.url}/user/cadastro`;
       const data = await this.fetchServer(url, { body: fields, method: 'POST' });
-      console.log(data.message);
       return data;
     } catch {
-      console.log('eita');
       return { data: '', message: 'Erro no servidor!' };
     }
   }
@@ -77,64 +85,52 @@ export default class Server implements ServerMethods {
     try {
       const url = `${this.url}/user/login`;
       const data = await this.fetchServer(url, { body: fields, method: 'POST' });
-      console.log(data.message);
       return data;
     } catch {
-      console.log('eita');
       return { data: '', message: 'Erro no servidor!' };
     }
   }
 
-  async criarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>> {
+  async criarTarefa(fields: Task): Promise<ResponseServer<Task>> {
     try {
       const url = `${this.url}/task/create`;
       const data = await this.fetchServer(url, { body: fields, method: 'POST' });
-      console.log(data.message);
       return data;
     } catch {
-      console.log('eita');
-      return { data: { data: false, message: '' }, message: 'Erro no servidor!' };
+      return { data: {} as Task, message: 'Erro no servidor!' };
     }
   }
 
-  async deletarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>> {
+  async deletarTarefa(taskId: number): Promise<ResponseServer<boolean>> {
     try {
       const url = `${this.url}/task/delete`;
-      const data = await this.fetchServer(url, { body: fields, method: 'DELETE' });
-      console.log(data.message);
+      const data = await this.fetchServer(url, { body: { taskId }, method: 'DELETE' });
       return data;
     } catch {
-      console.log('eita');
-      return { data: { data: false, message: '' }, message: 'Erro no servidor!' };
+      return { data: false, message: 'Erro no servidor!' };
     }
   }
 
-  async editarTarefa(fields: Task): Promise<ResponseServer<ResponseServer<boolean>>> {
+  async editarTarefa(fields: Task): Promise<ResponseServer<boolean>> {
     try {
       const url = `${this.url}/task/edit`;
-      const data = await this.fetchServer(url, { body: fields, method: 'UPDATE' });
-      console.log(data.message);
+      const data = await this.fetchServer(url, { body: fields, method: 'PATCH' });
       return data;
     } catch {
-      console.log('eita');
-      return { data: { data: false, message: '' }, message: 'Erro no servidor!' };
+      return { data: false, message: 'Erro no servidor!' };
     }
   }
 
-  async todasTarefas(userId: number): Promise<ResponseServer<ResponseServer<Task[]>>> {
+  async todasTarefas(): Promise<ResponseServer<Task[]>> {
     try {
       const url = `${this.url}/task`;
-      const data = await this.fetchServer(url, { body: { userId }, method: 'GET' });
-      console.log(data.message);
+      const data = await this.fetchServer(url, { body: {}, method: 'GET' });
       return data;
-    } catch {
-      console.log('eita');
-      return { data: { data: [], message: '' }, message: 'Erro no servidor!' };
+    } catch (err) {
+      console.log(err);
+      return { data: [], message: 'Erro no servidor!' };
     }
   }
 }
 
-const localToken = localStorage.getItem('token');
-const token = localToken ? JSON.parse(localToken) : '';
-
-export const DataBase = new Server(token);
+export const DataBase = new Server(LocalSaves.localGet('User')?.token);
