@@ -1,11 +1,24 @@
-NÃO FINALIZADO
+# make_ur_tasks_front_end
 
-Área de trabalho do trello deste projeto -> https://trello.com/b/QPrGK1Cb/make-ur-tasks
+## Project setup
+```
+npm install
+```
 
-Tecnologias utilizadas neste projeto :
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
 
-* Front-End
+### Compiles and minifies for production
+```
+npm run build
+```
 
-  - TypeScript
-  - React.js
-  - Tailwind
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
