@@ -3,8 +3,8 @@
   <main>
     <form id="task-form">
       <label for="task">Task:</label>
-      <input type="text" id="task" name="task" required>
-      <button type="submit">Add Task</button>
+      <input minlength="2" v-model="taskInput" type="text" id="task" name="task" required>
+      <button @click="addTask($event)" type="submit">Add Task</button>
     </form>
     <section>
 
@@ -13,8 +13,8 @@
         in tasks"
         :key="task.id"
         :task="task"
-        @change="changeTask"
-        @remove="removeTask"
+        @change-task="changeTask"
+        @remove-task="removeTask"
       />
 
     </section>
@@ -32,6 +32,7 @@ export default {
   },
   data () {
     return {
+      taskInput: null,
       tasks: [
         { id: 1, text: 'Learn Vue.js', finished: true },
         { id: 2, text: 'Learn React', finished: false },
@@ -42,20 +43,21 @@ export default {
   methods: {
     addTask (event) {
       event.preventDefault()
-      const taskInput = document.getElementById('task')
       const task = {
         id: this.tasks.length + 1,
-        text: taskInput.value,
+        text: this.taskInput,
         finished: false
       }
       this.tasks.push(task)
-      taskInput.value = ''
+      this.taskInput = ''
     },
-    changeTask (id, finished) {
+    changeTask (id) {
       const task = this.tasks.find(task => task.id === id)
-      task.finished = finished
+      console.log('changeTask', id, task.finished)
+      task.finished = !task.finished
     },
     removeTask (id) {
+      console.log('removeTask', id)
       this.tasks = this.tasks.filter(task => task.id !== id)
     }
   }
