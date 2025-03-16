@@ -53,7 +53,7 @@ export default {
     background-color: #f55;
     transform: scale(1.05);
   }
-  
+
   .task-article input {
     cursor: pointer;
   }
