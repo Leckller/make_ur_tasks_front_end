@@ -1,3 +1,4 @@
+import ValidateStatus from '@/utils/ValidateStatus'
 import VariablesService from './Variables.service'
 
 export default class TaskService {
@@ -16,7 +17,17 @@ export default class TaskService {
       method: 'POST',
       body
     })
-    return await req.json()
+
+    const response = await req.json()
+
+    // Validations
+    const validation = ValidateStatus.validateStatus(req.status, response)
+
+    if (validation) {
+      return
+    }
+
+    return response
   }
 
   // Get - /task || /task?
@@ -24,6 +35,16 @@ export default class TaskService {
     const req = await fetch(`${VariablesService.baseUrl}/task`, {
       headers: { 'Content-Type': 'application/json' }
     })
-    return await req.json()
+
+    const response = await req.json()
+
+    // Validations
+    const validation = ValidateStatus.validateStatus(req.status, response)
+
+    if (validation) {
+      return
+    }
+
+    return response
   }
 }

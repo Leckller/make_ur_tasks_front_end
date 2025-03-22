@@ -1,4 +1,5 @@
 import VariablesService from './Variables.service'
+import ValidateStatus from '@/utils/ValidateStatus'
 
 export default class UserService {
   // Post -> /user
@@ -11,13 +12,22 @@ export default class UserService {
     }
 */
   static async createUser (body) {
-    const req = await fetch(`${VariablesService.baseUrl}/user`, {
+    const req = await fetch('http://localhost:8080/user', {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
-      body: JSON.parse(body)
+      body: JSON.stringify(body)
     })
-    alert(req)
-    return await req.json()
+
+    const response = await req.json()
+
+    // Validations
+    const validation = ValidateStatus.validateStatus(req.status, response)
+
+    if (validation) {
+      return
+    }
+
+    return response
   };
 
   // Post -> /auth/login
@@ -33,6 +43,16 @@ export default class UserService {
       method: 'POST',
       body
     })
-    return await req.json()
+
+    const response = await req.json()
+
+    // Validations
+    const validation = ValidateStatus.validateStatus(req.status, response)
+
+    if (validation) {
+      return
+    }
+
+    return response
   }
 }

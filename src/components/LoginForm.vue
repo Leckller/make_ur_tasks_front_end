@@ -1,9 +1,11 @@
 <template>
     <form id="login-form">
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required>
-      <label for="password">Password:</label>
-      <input type="password" id="password" name="password" required>
+      <label for="login-email">Email:</label>
+      <input type="email" id="login-email" autocomplete="email"  name="login-email" required>
+
+      <label for="login-password">Password:</label>
+      <input type="password" id="login-password" name="login-password" autocomplete="current-password" required>
+
       <button type="submit">Login</button>
     </form>
 </template>
