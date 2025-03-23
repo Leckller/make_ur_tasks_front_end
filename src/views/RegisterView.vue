@@ -19,3 +19,12 @@ export default {
 }
 
 </script>
+
+<style scoped>
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+}
+</style>

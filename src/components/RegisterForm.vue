@@ -35,23 +35,19 @@ export default {
     async submit (e) {
       e.preventDefault()
       try {
-        const createUser = await UserService.createUser({
+        const response = await UserService.createUser({
           name: this.name,
           username: this.username,
           email: this.email,
           password: this.password
         })
+        localStorage.setItem('authToken', response.token)
         console.log(createUser)
       } catch (e) {
         console.log(e)
       }
     }
-  },
-
-  mounted () {
-    console.log(this)
   }
-
 }
 </script>
 
@@ -61,6 +57,8 @@ export default {
     display: flex;
     flex-direction: column;
     width: 300px;
+    border-radius: 16px;
+    padding: 50px;
     background-color: yellow;
   }
 

@@ -1,18 +1,39 @@
 <template>
     <form id="login-form">
-      <label for="login-email">Email:</label>
-      <input type="email" id="login-email" autocomplete="email"  name="login-email" required>
+      <label for="login-username">Username:</label>
+      <input v-model="username" type="username" id="login-username" autocomplete="username"  name="login-username" required>
 
       <label for="login-password">Password:</label>
-      <input type="password" id="login-password" name="login-password" autocomplete="current-password" required>
+      <input v-model="password" type="password" id="login-password" name="login-password" autocomplete="current-password" required>
 
-      <button type="submit">Login</button>
+      <button :disabled="!(username || password.length >= 8)" type="submit">Login</button>
     </form>
 </template>
 
 <script>
+import router from '@/router'
+import UserService from '@/service/User.service'
+
 export default {
-  name: 'LoginForm'
+  name: 'LoginForm',
+  data () {
+    return {
+      username: null,
+      password: ''
+    }
+  },
+  methods: {
+    async login () {
+      try {
+        const response = await UserService.login({username: this.username, password: this.password})
+        localStorage.setItem('authToken', response.token)
+        router.push({name: 'HomeView'})
+        console.log(response)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
 }
 </script>
 
@@ -21,7 +42,9 @@ export default {
 #login-form {
   display: flex;
   flex-direction: column;
+  padding: 50px;
   width: 300px;
+  border-radius: 16px;
   background-color: blue;
 }
 
