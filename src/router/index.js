@@ -41,7 +41,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !token) {
     next('/register')
   } else {
-    next() // Se tiver token, segue para a página
+    next()
   }
 })
 

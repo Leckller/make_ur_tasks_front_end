@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import router from '@/router'
 import UserService from '@/service/User.service'
 
 export default {
@@ -35,13 +36,13 @@ export default {
     async submit (e) {
       e.preventDefault()
       try {
-        const response = await UserService.createUser({
+        await UserService.createUser({
           name: this.name,
           username: this.username,
           email: this.email,
           password: this.password
         })
-        console.log(response)
+        router.push('/')
       } catch (e) {
         console.log(e)
       }

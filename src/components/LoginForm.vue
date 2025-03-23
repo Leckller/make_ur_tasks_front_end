@@ -26,9 +26,8 @@ export default {
     async login (e) {
       e.preventDefault()
       try {
-        const response = await UserService.login({ username: this.username, password: this.password })
-        router.push({ name: 'HomeView' })
-        console.log(response)
+        await UserService.login({ username: this.username, password: this.password })
+        router.push('/')
       } catch (error) {
         console.error(error)
       }
