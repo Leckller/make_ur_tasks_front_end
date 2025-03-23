@@ -1,12 +1,12 @@
 <template>
     <article class="task-article" :class="task.finished && 'task-finished'">
       <input
-        @click="$emit('changeTask', task.id)"
+        @click="$emit('changeTask', $event, task.id)"
         type="checkbox"
         :checked="task.finished"
       >
-      <p :class="task.finished && 'input-checked'">{{ task.text }}</p>
-      <button @click="$emit('removeTask', task.id)">Remove</button>
+      <p :class="task.finished && 'input-checked'">{{ task.title }}</p>
+      <button @click="$emit('removeTask', $event, task.id)">Remove</button>
 </article>
 </template>
 
@@ -17,8 +17,10 @@ export default {
   props: {
     task: {
       id: Number,
-      text: String,
-      finished: Boolean
+      title: String,
+      finished: Boolean,
+      createdAt: Date,
+      updatedAt: Date
     }
   }
 

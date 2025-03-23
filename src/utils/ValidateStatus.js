@@ -32,4 +32,15 @@ export default class ValidateStatus {
 
     return false
   }
+
+  static popSucess (title, text) {
+    Swal.fire({
+      icon: 'success',
+      title,
+      text,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 1500
+    })
+  }
 }

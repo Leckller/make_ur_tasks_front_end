@@ -27,6 +27,8 @@ export default class UserService {
       return
     }
 
+    localStorage.setItem('authToken', response.token)
+
     return response
   };
 
@@ -41,7 +43,7 @@ export default class UserService {
     const req = await fetch(`${VariablesService.baseUrl}/auth/login`, {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
-      body
+      body: JSON.stringify(body)
     })
 
     const response = await req.json()
@@ -52,6 +54,8 @@ export default class UserService {
     if (validation) {
       return
     }
+
+    localStorage.setItem('authToken', response.token)
 
     return response
   }

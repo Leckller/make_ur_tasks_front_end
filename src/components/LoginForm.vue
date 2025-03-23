@@ -6,7 +6,7 @@
       <label for="login-password">Password:</label>
       <input v-model="password" type="password" id="login-password" name="login-password" autocomplete="current-password" required>
 
-      <button :disabled="!(username || password.length >= 8)" type="submit">Login</button>
+      <button :disabled="!(username || password.length >= 8)" @click="login" type="submit">Login</button>
     </form>
 </template>
 
@@ -23,11 +23,11 @@ export default {
     }
   },
   methods: {
-    async login () {
+    async login (e) {
+      e.preventDefault()
       try {
-        const response = await UserService.login({username: this.username, password: this.password})
-        localStorage.setItem('authToken', response.token)
-        router.push({name: 'HomeView'})
+        const response = await UserService.login({ username: this.username, password: this.password })
+        router.push({ name: 'HomeView' })
         console.log(response)
       } catch (error) {
         console.error(error)

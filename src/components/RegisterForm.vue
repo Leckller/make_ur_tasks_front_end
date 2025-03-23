@@ -41,8 +41,7 @@ export default {
           email: this.email,
           password: this.password
         })
-        localStorage.setItem('authToken', response.token)
-        console.log(createUser)
+        console.log(response)
       } catch (e) {
         console.log(e)
       }

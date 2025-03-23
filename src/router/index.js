@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import RegisterView from '@/views/RegisterView.vue'
-import ProfileView from '@/views/ProfileView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 
 const routes = [
@@ -9,12 +8,6 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView,
-    meta: { requiresAuth: true } // Rota protegida
-  },
-  {
-    path: '/profile',
-    name: 'profile',
-    component: ProfileView,
     meta: { requiresAuth: true } // Rota protegida
   },
   {

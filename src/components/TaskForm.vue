@@ -2,9 +2,8 @@
 
   <main id="main-task-form">
     <form id="task-form">
-      <label for="task">Task:</label>
-      <input minlength="2" v-model="taskInput" type="text" id="task" name="task" required>
-      <button @click="addTask($event)" type="submit">Add Task</button>
+      <input minlength="2" v-model="taskInput" placeholder="Digite um nome para a sua tarefa!" type="text" id="task" name="task" required>
+      <button id="createTaskButton" :disabled="!(taskInput.length >= 2)" @click="addTask($event)" type="submit">Adicionar tarefa</button>
     </form>
     <section id="tasks-section">
 
@@ -23,7 +22,9 @@
 </template>
 
 <script>
+import TaskService from '@/service/Task.service'
 import TaskDetails from './TaskDetails.vue'
+import ValidateStatus from '@/utils/ValidateStatus'
 
 export default {
   name: 'TaskForm',
@@ -32,33 +33,50 @@ export default {
   },
   data () {
     return {
-      taskInput: null,
-      tasks: [
-        { id: 1, text: 'Learn Vue.js', finished: true },
-        { id: 2, text: 'Learn React', finished: false },
-        { id: 3, text: 'Learn Angular', finished: false }
-      ]
+      taskInput: '',
+      tasks: []
     }
   },
   methods: {
-    addTask (event) {
+    async addTask (event) {
       event.preventDefault()
-      const task = {
-        id: this.tasks.length + 1,
-        text: this.taskInput,
-        finished: false
+      try {
+        const response = await TaskService.createTask({ title: this.taskInput })
+        this.tasks.unshift(response)
+        console.log(response)
+      } catch (e) {
+        console.log(e)
       }
-      this.tasks.push(task)
-      this.taskInput = ''
     },
-    changeTask (id) {
-      const task = this.tasks.find(task => task.id === id)
-      console.log('changeTask', id, task.finished)
-      task.finished = !task.finished
+    async changeTask (event, id) {
+      event.preventDefault()
+      try {
+        const response = await TaskService.toggleTask(id)
+        const task = this.tasks.find(task => task.id === id)
+        task.finished = !task.finished
+        console.log(response)
+      } catch (e) {
+        console.log(e)
+      }
     },
-    removeTask (id) {
-      console.log('removeTask', id)
-      this.tasks = this.tasks.filter(task => task.id !== id)
+    async removeTask (event, id) {
+      event.preventDefault()
+      try {
+        await TaskService.deleteTask(id)
+        this.tasks = this.tasks.filter(task => task.id !== id)
+        ValidateStatus.popSucess('Tarefa deletada!', '')
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  },
+  async mounted () {
+    try {
+      const response = await TaskService.getTasks()
+      this.tasks = response
+      console.log(response)
+    } catch (e) {
+      console.log(e)
     }
   }
 }
@@ -66,6 +84,10 @@ export default {
 </script>
 
 <style  scoped>
+
+  #createTaskButton:disabled {
+    cursor: not-allowed;
+  }
 
   #main-task-form {
     display: flex;
@@ -113,6 +135,10 @@ export default {
 
   #task-form input {
     max-width: 200px;
+  }
+
+  #task {
+    width: 100%;
   }
 
   @media (max-width: 350px) {

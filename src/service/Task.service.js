@@ -12,10 +12,12 @@ export default class TaskService {
   }
   */
   static async createTask (body) {
+    const authToken = localStorage.getItem('authToken')
+
     const req = await fetch(`${VariablesService.baseUrl}/task`, {
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Authorization: authToken },
       method: 'POST',
-      body
+      body: JSON.stringify(body)
     })
 
     const response = await req.json()
@@ -32,8 +34,10 @@ export default class TaskService {
 
   // Get - /task || /task?
   static async getTasks () {
+    const authToken = localStorage.getItem('authToken')
+
     const req = await fetch(`${VariablesService.baseUrl}/task`, {
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 'Content-Type': 'application/json', Authorization: authToken }
     })
 
     const response = await req.json()
@@ -41,9 +45,36 @@ export default class TaskService {
     // Validations
     const validation = ValidateStatus.validateStatus(req.status, response)
 
-    if (validation) {
-      return
-    }
+    if (validation) return
+
+    return response
+  }
+
+  // Delete - /task/id
+  static async deleteTask (id) {
+    const authToken = localStorage.getItem('authToken')
+
+    await fetch(`${VariablesService.baseUrl}/task/${id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json', Authorization: authToken }
+    })
+  }
+
+  // Patch - /task/id
+  static async toggleTask (id) {
+    const authToken = localStorage.getItem('authToken')
+
+    const req = await fetch(`${VariablesService.baseUrl}/task/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json', Authorization: authToken }
+    })
+
+    const response = await req.json()
+
+    // Validations
+    const validation = ValidateStatus.validateStatus(req.status, response)
+
+    if (validation) return
 
     return response
   }
