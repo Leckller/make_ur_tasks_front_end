@@ -1,29 +1,28 @@
 <template>
 
-  <main id="main-task-form">
-    <form id="task-form">
-      <label for="task">Task:</label>
-      <input minlength="2" v-model="taskInput" type="text" id="task" name="task" required>
-      <button @click="addTask($event)" type="submit">Add Task</button>
-    </form>
-    <section id="tasks-section">
+  <form id="task-form">
+    <textarea maxlength="250" minlength="2" v-model="taskInput" placeholder="Digite um nome para a sua tarefa!" type="text" id="task" name="task" required />
+    <button id="createTaskButton" :disabled="!(taskInput.length >= 2)" @click="addTask($event)" type="submit">Adicionar tarefa</button>
+  </form>
+  <section id="tasks-section">
 
-      <TaskDetails
-        v-for="task
-        in tasks"
-        :key="task.id"
-        :task="task"
-        @change-task="changeTask"
-        @remove-task="removeTask"
-      />
+    <TaskDetails
+      v-for="task
+      in tasks"
+      :key="task.id"
+      :task="task"
+      @change-task="changeTask"
+      @remove-task="removeTask"
+    />
 
-    </section>
-  </main>
+  </section>
 
 </template>
 
 <script>
+import TaskService from '@/service/Task.service'
 import TaskDetails from './TaskDetails.vue'
+import ValidateStatus from '@/utils/ValidateStatus'
 
 export default {
   name: 'TaskForm',
@@ -32,33 +31,51 @@ export default {
   },
   data () {
     return {
-      taskInput: null,
-      tasks: [
-        { id: 1, text: 'Learn Vue.js', finished: true },
-        { id: 2, text: 'Learn React', finished: false },
-        { id: 3, text: 'Learn Angular', finished: false }
-      ]
+      taskInput: '',
+      tasks: []
     }
   },
   methods: {
-    addTask (event) {
+    async addTask (event) {
       event.preventDefault()
-      const task = {
-        id: this.tasks.length + 1,
-        text: this.taskInput,
-        finished: false
+      try {
+        const response = await TaskService.createTask({ title: this.taskInput })
+        this.tasks.unshift(response)
+        this.taskInput = ''
+        console.log(response)
+      } catch (e) {
+        console.log(e)
       }
-      this.tasks.push(task)
-      this.taskInput = ''
     },
-    changeTask (id) {
-      const task = this.tasks.find(task => task.id === id)
-      console.log('changeTask', id, task.finished)
-      task.finished = !task.finished
+    async changeTask (event, id) {
+      event.preventDefault()
+      try {
+        const response = await TaskService.toggleTask(id)
+        const task = this.tasks.find(task => task.id === id)
+        task.finished = !task.finished
+        console.log(response)
+      } catch (e) {
+        console.log(e)
+      }
     },
-    removeTask (id) {
-      console.log('removeTask', id)
-      this.tasks = this.tasks.filter(task => task.id !== id)
+    async removeTask (event, id) {
+      event.preventDefault()
+      try {
+        await TaskService.deleteTask(id)
+        this.tasks = this.tasks.filter(task => task.id !== id)
+        ValidateStatus.popSucess('Tarefa deletada!', '')
+      } catch (e) {
+        console.log(e)
+      }
+    }
+  },
+  async mounted () {
+    try {
+      const response = await TaskService.getTasks()
+      this.tasks = response
+      console.log(response)
+    } catch (e) {
+      console.log(e)
     }
   }
 }
@@ -67,14 +84,8 @@ export default {
 
 <style  scoped>
 
-  #main-task-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
+  #createTaskButton:disabled {
+    cursor: not-allowed;
   }
 
   #tasks-section {
@@ -91,14 +102,16 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
-    border: 1px solid #ccc;
     gap: 16px;
-    max-width: 350px;
+    max-width: 500px;
     width: 90%;
+    border: none;
+    background-color: #cc2936ff;
+    border-radius: 16px;
   }
 
   #task-form button {
-    background-color: #0f0;
+    background-color: rgb(72, 164, 127);
     color: #fff;
     border: none;
     padding: .5rem 1rem;
@@ -107,19 +120,25 @@ export default {
   }
 
   #task-form button:hover {
-    background-color: #0f5;
+    background-color: rgb(46, 222, 151);
     transform: scale(1.05);
   }
 
-  #task-form input {
-    max-width: 200px;
+  #task-form input, textarea {
+    width: 100%;
+    resize: none;
+    background-color: #388697ff;
+  }
+
+  #task {
+    width: 100%;
   }
 
   @media (max-width: 350px) {
     #task-form {
       flex-wrap: wrap;
     }
-    #task-form input {
+    #task-form input, textarea {
       width: 100%;
     }
 
