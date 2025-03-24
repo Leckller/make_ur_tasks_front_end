@@ -1,3 +1,3 @@
 export default {
-  baseUrl: import.meta.env.VITE_API_URL
+  baseUrl: process.env.VUE_APP_API_URL
 }
