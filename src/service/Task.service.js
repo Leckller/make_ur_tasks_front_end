@@ -23,11 +23,7 @@ export default class TaskService {
     const response = await req.json()
 
     // Validations
-    const validation = ValidateStatus.validateStatus(req.status, response)
-
-    if (validation) {
-      return
-    }
+    if (ValidateStatus.validateStatus(req.status, response)) return
 
     return response
   }
@@ -43,9 +39,7 @@ export default class TaskService {
     const response = await req.json()
 
     // Validations
-    const validation = ValidateStatus.validateStatus(req.status, response)
-
-    if (validation) return
+    if (ValidateStatus.validateStatus(req.status, response)) return
 
     return response
   }
@@ -72,9 +66,7 @@ export default class TaskService {
     const response = await req.json()
 
     // Validations
-    const validation = ValidateStatus.validateStatus(req.status, response)
-
-    if (validation) return
+    if (ValidateStatus.validateStatus(req.status, response)) return
 
     return response
   }

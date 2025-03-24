@@ -6,7 +6,7 @@
         :checked="task.finished"
       >
       <p :class="task.finished && 'input-checked'">{{ task.title }}</p>
-      <button @click="$emit('removeTask', $event, task.id)">Remove</button>
+      <button @click="$emit('removeTask', $event, task.id)">Apagar tarefa</button>
 </article>
 </template>
 
@@ -33,17 +33,24 @@ export default {
   .task-article {
     flex-wrap: wrap;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    align-items: end;
     padding: 1rem;
-    border: 1px solid #ccc;
     gap: 16px;
     max-width: 350px;
     width: 90%;
+    word-break: break-all;
+    border: none;
+    background-color: #08415cff;
+    border-radius: 16px;
+  }
+
+  p {
+    width: 100%;
   }
 
   .task-article button {
-    background-color: #f00;
+    background-color: #cc2936ff;
     color: #fff;
     border: none;
     padding: .5rem 1rem;
@@ -52,7 +59,7 @@ export default {
   }
 
   .task-article button:hover {
-    background-color: #f55;
+    background-color: rgb(255, 82, 97);
     transform: scale(1.05);
   }
 

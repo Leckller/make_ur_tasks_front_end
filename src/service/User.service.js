@@ -12,7 +12,7 @@ export default class UserService {
     }
 */
   static async createUser (body) {
-    const req = await fetch('http://localhost:8080/user', {
+    const req = await fetch(`${VariablesService.baseUrl}/user`, {
       headers: { 'Content-Type': 'application/json' },
       method: 'POST',
       body: JSON.stringify(body)
@@ -21,11 +21,7 @@ export default class UserService {
     const response = await req.json()
 
     // Validations
-    const validation = ValidateStatus.validateStatus(req.status, response)
-
-    if (validation) {
-      return
-    }
+    if (ValidateStatus.validateStatus(req.status, response)) return
 
     localStorage.setItem('authToken', response.token)
 
@@ -49,11 +45,7 @@ export default class UserService {
     const response = await req.json()
 
     // Validations
-    const validation = ValidateStatus.validateStatus(req.status, response)
-
-    if (validation) {
-      return
-    }
+    if (ValidateStatus.validateStatus(req.status, response)) return
 
     localStorage.setItem('authToken', response.token)
 

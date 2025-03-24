@@ -1,23 +1,21 @@
 <template>
 
-  <main id="main-task-form">
-    <form id="task-form">
-      <input minlength="2" v-model="taskInput" placeholder="Digite um nome para a sua tarefa!" type="text" id="task" name="task" required>
-      <button id="createTaskButton" :disabled="!(taskInput.length >= 2)" @click="addTask($event)" type="submit">Adicionar tarefa</button>
-    </form>
-    <section id="tasks-section">
+  <form id="task-form">
+    <textarea maxlength="250" minlength="2" v-model="taskInput" placeholder="Digite um nome para a sua tarefa!" type="text" id="task" name="task" required />
+    <button id="createTaskButton" :disabled="!(taskInput.length >= 2)" @click="addTask($event)" type="submit">Adicionar tarefa</button>
+  </form>
+  <section id="tasks-section">
 
-      <TaskDetails
-        v-for="task
-        in tasks"
-        :key="task.id"
-        :task="task"
-        @change-task="changeTask"
-        @remove-task="removeTask"
-      />
+    <TaskDetails
+      v-for="task
+      in tasks"
+      :key="task.id"
+      :task="task"
+      @change-task="changeTask"
+      @remove-task="removeTask"
+    />
 
-    </section>
-  </main>
+  </section>
 
 </template>
 
@@ -43,6 +41,7 @@ export default {
       try {
         const response = await TaskService.createTask({ title: this.taskInput })
         this.tasks.unshift(response)
+        this.taskInput = ''
         console.log(response)
       } catch (e) {
         console.log(e)
@@ -89,16 +88,6 @@ export default {
     cursor: not-allowed;
   }
 
-  #main-task-form {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-  }
-
   #tasks-section {
     display: flex;
     flex-direction: column;
@@ -113,14 +102,16 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 1rem;
-    border: 1px solid #ccc;
     gap: 16px;
-    max-width: 350px;
+    max-width: 500px;
     width: 90%;
+    border: none;
+    background-color: #cc2936ff;
+    border-radius: 16px;
   }
 
   #task-form button {
-    background-color: #0f0;
+    background-color: rgb(72, 164, 127);
     color: #fff;
     border: none;
     padding: .5rem 1rem;
@@ -129,12 +120,14 @@ export default {
   }
 
   #task-form button:hover {
-    background-color: #0f5;
+    background-color: rgb(46, 222, 151);
     transform: scale(1.05);
   }
 
-  #task-form input {
-    max-width: 200px;
+  #task-form input, textarea {
+    width: 100%;
+    resize: none;
+    background-color: #388697ff;
   }
 
   #task {
@@ -145,7 +138,7 @@ export default {
     #task-form {
       flex-wrap: wrap;
     }
-    #task-form input {
+    #task-form input, textarea {
       width: 100%;
     }
 
