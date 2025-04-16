@@ -21,7 +21,7 @@ export default class UserService {
     const response = await req.json()
 
     // Validations
-    if (ValidateStatus.validateStatus(req.status, response)) return
+    if (ValidateStatus.validateStatus(req.status, response)) return true
 
     localStorage.setItem('authToken', response.token)
 
@@ -45,7 +45,7 @@ export default class UserService {
     const response = await req.json()
 
     // Validations
-    if (ValidateStatus.validateStatus(req.status, response)) return
+    if (ValidateStatus.validateStatus(req.status, response)) return true
 
     localStorage.setItem('authToken', response.token)
 

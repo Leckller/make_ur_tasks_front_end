@@ -21,6 +21,8 @@
 <script>
 import router from '@/router'
 import UserService from '@/service/User.service'
+import ValidateStatus from '@/utils/ValidateStatus'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'RegisterForm',
@@ -39,16 +41,21 @@ export default {
   methods: {
     async submit (e) {
       e.preventDefault()
+      ValidateStatus.popLoading()
       try {
-        await UserService.createUser({
+        const confirm = await UserService.createUser({
           name: this.name,
           username: this.username,
           email: this.email,
           password: this.password
         })
+        if (confirm) return
         router.push('/')
-      } catch (e) {
-        console.log(e)
+      } catch (error) {
+      } finally {
+        setTimeout(() => {
+          Swal.close()
+        }, 1500)
       }
     }
   }

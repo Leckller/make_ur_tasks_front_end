@@ -23,6 +23,7 @@
 import TaskService from '@/service/Task.service'
 import TaskDetails from './TaskDetails.vue'
 import ValidateStatus from '@/utils/ValidateStatus'
+import Swal from 'sweetalert2'
 
 export default {
   name: 'TaskForm',
@@ -38,44 +39,63 @@ export default {
   methods: {
     async addTask (event) {
       event.preventDefault()
+      ValidateStatus.popLoading()
       try {
         const response = await TaskService.createTask({ title: this.taskInput })
         this.tasks.unshift(response)
         this.taskInput = ''
-        console.log(response)
+        ValidateStatus.popSucess('Tarefa criada!', '')
       } catch (e) {
-        console.log(e)
+        ValidateStatus.popBad()
+      } finally {
+        setTimeout(() => {
+          Swal.close()
+        }, 1500)
       }
     },
     async changeTask (event, id) {
       event.preventDefault()
+      ValidateStatus.popLoading()
       try {
-        const response = await TaskService.toggleTask(id)
+        await TaskService.toggleTask(id)
         const task = this.tasks.find(task => task.id === id)
         task.finished = !task.finished
-        console.log(response)
+        ValidateStatus.popSucess('Tarefa editada!', '')
       } catch (e) {
-        console.log(e)
+        ValidateStatus.popBad()
+      } finally {
+        setTimeout(() => {
+          Swal.close()
+        }, 1500)
       }
     },
     async removeTask (event, id) {
       event.preventDefault()
+      ValidateStatus.popLoading()
       try {
         await TaskService.deleteTask(id)
         this.tasks = this.tasks.filter(task => task.id !== id)
         ValidateStatus.popSucess('Tarefa deletada!', '')
       } catch (e) {
-        console.log(e)
+        ValidateStatus.popBad()
+      } finally {
+        setTimeout(() => {
+          Swal.close()
+        }, 1500)
       }
     }
   },
   async mounted () {
     try {
+      ValidateStatus.popLoading()
       const response = await TaskService.getTasks()
       this.tasks = response
-      console.log(response)
     } catch (e) {
-      console.log(e)
+      ValidateStatus.popBad()
+    } finally {
+      setTimeout(() => {
+        Swal.close()
+      }, 1500)
     }
   }
 }

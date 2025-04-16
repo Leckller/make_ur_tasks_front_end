@@ -15,6 +15,8 @@
 <script>
 import router from '@/router'
 import UserService from '@/service/User.service'
+import Swal from 'sweetalert2'
+import ValidateStatus from '@/utils/ValidateStatus'
 
 export default {
   name: 'LoginForm',
@@ -31,10 +33,15 @@ export default {
     async login (e) {
       e.preventDefault()
       try {
-        await UserService.login({ username: this.username, password: this.password })
+        const confirm = await UserService.login({ username: this.username, password: this.password })
+        if (confirm) return
         router.push('/')
       } catch (error) {
-        console.error(error)
+        ValidateStatus.popBad()
+      } finally {
+        setTimeout(() => {
+          Swal.close()
+        }, 1500)
       }
     }
   }
