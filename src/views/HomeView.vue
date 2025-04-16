@@ -1,18 +1,29 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <main id="main-task-form">
+    <TaskForm />
+  </main>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import TaskForm from '@/components/TaskForm.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    HelloWorld
+    TaskForm
   }
 }
+
 </script>
+
+<style scoped>
+  #main-task-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 32px;
+    align-items: center;
+    width: 100%;
+    height: 100vh;
+  }
+</style>
